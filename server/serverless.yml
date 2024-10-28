@@ -1,0 +1,143 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+# org: jsd23
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: meetupBE
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:DeleteItem
+          Resource: arn:aws:dynamodb:${aws:region}:*:table/*
+
+functions:
+  signup:
+    handler: services/api/signup.handler
+    events:
+      - httpApi:
+          path: /signup
+          method: post
+
+  login:
+    handler: services/api/login.handler
+    events:
+      - httpApi:
+          path: /login
+          method: post
+
+  getMeetups:
+    handler: services/api/getMeetups.handler
+    events:
+      - httpApi:
+          path: /meetups
+          method: get
+
+  getOneMeetup:
+    handler: services/api/getOneMeetup.handler
+    events:
+      - httpApi:
+          path: /meetups/{meetupId}
+          method: get
+
+  registerToMeetup:
+    handler: services/api/registerToMeetup.handler
+    events:
+      - httpApi:
+          path: /meetups
+          method: post
+
+  updateRegistration:
+    handler: services/api/updateRegistration.handler
+    events:
+      - httpApi:
+          path: /meetups
+          method: put
+
+  removeRegistration:
+    handler: services/api/removeRegistration.handler
+    events:
+      - httpApi:
+          path: /meetups
+          method: delete
+
+  postReview:
+    handler: services/api/postReview.handler
+    events:
+      - httpApi:
+          path: /reviews
+          method: post
+
+  getReviews:
+    handler: services/api/getReviews.handler
+    events:
+      - httpApi:
+          path: /reviews
+          method: get
+
+resources:
+  Resources:
+    meetupUsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: meetupUsersTable
+        AttributeDefinitions:
+          - AttributeName: mail
+            AttributeType: S
+          # - AttributeName:
+          #   AttributeType: S
+        KeySchema:
+          - AttributeName: mail
+            KeyType: HASH
+          # - AttributeName:
+          #   KeyType: "RANGE"
+        BillingMode: PAY_PER_REQUEST
+
+    meetupReviewsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: meetupReviewsTable
+        AttributeDefinitions:
+          - AttributeName: meetupId
+            AttributeType: S
+          # - AttributeName:
+          #   AttributeType: S
+        KeySchema:
+          - AttributeName: meetupId
+            KeyType: HASH
+          # - AttributeName:
+          #   KeyType: "RANGE"
+        BillingMode: PAY_PER_REQUEST
+
+    meetupTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: meetupTable
+        AttributeDefinitions:
+          - AttributeName: meetupId
+            AttributeType: S
+          # - AttributeName:
+          #   AttributeType: S
+        KeySchema:
+          - AttributeName: meetupId
+            KeyType: HASH
+          # - AttributeName:
+          #   KeyType: "RANGE"
+        # GlobalSecondaryIndexes:
+        #   - IndexName: meetupParticipantsIndex
+        #     KeySchema:
+        #       - AttributeName: meetupId
+        #         KeyType: HASH
+        #       - AttributeName:
+        #         KeyType: RANGE
+        #     Projection:
+        #       ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
