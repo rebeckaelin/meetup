@@ -22,13 +22,14 @@ export const parseAndValidateBody = async (event) => {
   try {
     parsedBody = JSON.parse(event.body);
   } catch (error) {
+    console.error("3:", error);
     throw new Error("Invalid JSON format.");
   }
+
   const { email, password } = parsedBody;
 
   if (!email || email.trim() === "" || !password || password.trim() === "") {
     throw new Error("Email and password is required.");
   }
-
   return { email, password };
 };
