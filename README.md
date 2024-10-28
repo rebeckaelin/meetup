@@ -2,4 +2,4 @@
 
 grupparbete CD/CI &amp; deployment
 
-hejsan svejsan
+hejsan
