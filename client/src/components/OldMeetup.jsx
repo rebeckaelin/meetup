@@ -1,6 +1,8 @@
 import "../sass/OldMeetup.scss";
 import expandarrow from "../assets/expand-arrow.png";
+// import { useState } from "react";
 const OldMeetup = () => {
+  // const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="oldMeetupContainer">
       Kalles stickmöte

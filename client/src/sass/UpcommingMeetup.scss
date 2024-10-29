@@ -6,10 +6,15 @@
   width: 330px;
   padding: 10px;
   border-radius: 8px;
-  margin: 10px;
+  margin: 15px;
+}
+
+.headerContent {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  //   margin-bottom: 8px;
 }
 
 .expandMoreIcon {
@@ -17,4 +22,17 @@
   width: 20px;
   margin-left: auto;
   margin: 0;
+  display: inline-block;
+  transform-origin: center;
+  transition: transform 0.3s;
+  align-self: flex-end;
+}
+
+.additionalContent {
+  margin-top: 8px;
+  padding: 5px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  color: #333;
+  font-size: small;
 }
