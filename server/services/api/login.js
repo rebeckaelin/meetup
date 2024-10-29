@@ -1,4 +1,5 @@
 import { comparePassword } from "../utils/comparePassword.js";
+import { generateToken } from "../utils/generateToken.js";
 import { findUser } from "../utils/findUser.js";
 import {
   parseAndValidateBody,
@@ -52,9 +53,11 @@ export const handler = async (event) => {
       };
     }
 
+    const token = generateToken({ userId: user.userId, email: user.email })
+
     return {
       statusCode: 201,
-      body: JSON.stringify({ success: true }),
+      body: JSON.stringify({ success: true, token }),
     };
   } catch (error) {
     console.error("bottom:", error);
