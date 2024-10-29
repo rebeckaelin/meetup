@@ -33,3 +33,28 @@ export const parseAndValidateBody = async (event) => {
   }
   return { email, password };
 };
+
+export const parseReviewBody = async (event) => {
+  let parsedBody;
+  try {
+    parsedBody = JSON.parse(event.body);
+  } catch (error) {
+    throw new Error("Invalid JSON format.");
+  }
+
+  const { comment, rating } = parsedBody;
+
+  const numericRating = Number(rating);
+  if (isNaN(numericRating)) {
+    throw new Error("Rating must be a valid number.");
+  }
+  if (numericRating < 1 || numericRating > 5) {
+    throw new Error("Rating must be between 1 and 5.");
+  }
+
+  // if (!comment || comment.trim() === "") {
+  //   throw new Error("Comment is required.");
+  // }
+
+  return { comment, rating };
+};
