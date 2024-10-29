@@ -1,15 +1,16 @@
 @mixin setDisplayFlex($direction) {
   display: flex;
   flex-direction: $direction;
-  align-items: center;
   margin: 0 auto;
   padding: 0;
 }
 
-@mixin setButtonStyle($fontColor, $backgroundColor, $borderRadius, $boxShadow) {
-  border-radius: $borderRadius;
-  box-shadow: $boxShadow;
+@mixin setButtonStyle($fontColor, $backgroundColor) {
+  border-radius: 4px;
+  // box-shadow: $boxShadow;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   font-size: 1rem;
+  border: none;
   font-weight: bold;
   color: $fontColor;
   background-color: $backgroundColor;
@@ -35,7 +36,8 @@
   color: $fontColor;
 }
 
-@mixin textFont($fontColor) {
+@mixin textFont($fontColor, $fontFamily) {
+  font-family: $fontFamily;
   font-size: 0.88rem;
   font-weight: 500;
   color: $fontColor;
