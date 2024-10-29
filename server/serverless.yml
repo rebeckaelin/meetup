@@ -90,12 +90,12 @@ resources:
       Properties:
         TableName: meetupUsersTable
         AttributeDefinitions:
-          - AttributeName: mail
+          - AttributeName: email
             AttributeType: S
           # - AttributeName:
           #   AttributeType: S
         KeySchema:
-          - AttributeName: mail
+          - AttributeName: email
             KeyType: HASH
           # - AttributeName:
           #   KeyType: "RANGE"
