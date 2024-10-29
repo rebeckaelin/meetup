@@ -43,12 +43,12 @@ functions:
           path: /meetups
           method: get
 
-  getOneMeetup:
-    handler: services/api/getOneMeetup.handler
+  addNewMeetup:
+    handler: services/api/addNewMeetup.handler
     events:
       - httpApi:
-          path: /meetups/{meetupId}
-          method: get
+          path: /meetups/add
+          method: post
 
   registerToMeetup:
     handler: services/api/registerToMeetup.handler
