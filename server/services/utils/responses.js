@@ -1,5 +1,5 @@
 
-export const sendResponse = (statusCode, message, data) => {
+export const sendResponse = (statusCode, data) => {
     return {
         statusCode: statusCode,
         headers: {
@@ -7,7 +7,6 @@ export const sendResponse = (statusCode, message, data) => {
         },
         body: JSON.stringify({ 
                 success: true, 
-                message: message,
                 data: data
             }
         )
