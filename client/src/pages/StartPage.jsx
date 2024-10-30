@@ -2,7 +2,7 @@ import "../sass/StartPage.scss";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const StartPage = () => {
@@ -11,9 +11,15 @@ const StartPage = () => {
   const [password, setPassword] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPsw, setLoginPsw] = useState("");
+  const [comparePsw, setComparePsw] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const navigate = useNavigate();
 
   const baseURL = "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com";
+
+  useEffect(() => {
+    setIsButtonDisabled(password !== comparePsw || password === "");
+  }, [password, comparePsw]);
 
   const toggleVisibility = (e) => {
     e.preventDefault();
@@ -22,6 +28,7 @@ const StartPage = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+
     try {
       const newUser = { email: email, password: password };
       console.log("newUser", newUser);
@@ -36,6 +43,7 @@ const StartPage = () => {
         setIsVisible(!isVisible);
         setEmail("");
         setPassword("");
+        setComparePsw("");
       }
     } catch (error) {
       console.error(error);
@@ -107,19 +115,36 @@ const StartPage = () => {
                 type="email"
                 name="email"
                 id="email"
+                autoComplete="off"
                 onChange={(e) => setEmail(e.target.value)}
               />
               <label htmlFor="password">Password</label>
               <input
                 value={password}
-                type="text"
+                type="password"
                 name="password"
                 id="password"
+                autoComplete="off"
                 onChange={(e) => setPassword(e.target.value)}
               />
               <label htmlFor="password">Confirm password</label>
-              <input type="text" name="password" id="checkpassword" />
-              <button className="signUpButton" type="submit">
+              <input
+                type="password"
+                name="password"
+                id="checkpassword"
+                value={comparePsw}
+                autoComplete="off"
+                onChange={(e) => setComparePsw(e.target.value)}
+              />
+              <button
+                className="signUpButton"
+                type="submit"
+                disabled={isButtonDisabled}
+                style={{
+                  backgroundColor: isButtonDisabled ? "gray" : "#EB6060",
+                  cursor: isButtonDisabled ? "not-allowed" : "pointer",
+                }}
+              >
                 SIGN UP
               </button>
             </form>
