@@ -1,29 +1,27 @@
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+@use "./index" as *;
 
 .upcommingMeetupContainer {
-  background: lightgray;
-  color: black;
+  background: $shaddow;
+  color: $black;
   width: 330px;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: $rounded;
   margin: 15px;
+  font-family: $fontFamily;
 }
 
 .headerContent {
-  display: flex;
-  flex-direction: row;
+  @include setDisplayFlex($row);
   align-items: center;
   justify-content: space-between;
-  //   margin-bottom: 8px;
 }
 
 .expandMoreIcon {
-  height: auto;
   width: 20px;
   margin-left: auto;
-  margin: 0;
   display: inline-block;
   transform-origin: center;
+  margin: 0;
   transition: transform 0.3s;
   align-self: flex-end;
 }
@@ -31,8 +29,13 @@
 .additionalContent {
   margin-top: 8px;
   padding: 5px;
-  background-color: #f0f0f0;
+  background-color: $shaddow;
   border-radius: 5px;
-  color: #333;
-  font-size: small;
+  color: $black;
+
+  @include textFont($black, $fontFamily, true);
+}
+
+.desc {
+  padding-bottom: 10px;
 }

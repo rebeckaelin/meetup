@@ -1,5 +1,3 @@
-// src/data/meetupData.js
-
 export const meetupData = [
   {
     name: "Annas teparty",

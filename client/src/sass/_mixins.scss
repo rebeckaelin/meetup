@@ -36,9 +36,9 @@
   color: $fontColor;
 }
 
-@mixin textFont($fontColor, $fontFamily) {
+@mixin textFont($fontColor, $fontFamily, $useSmallSize: false) {
   font-family: $fontFamily;
-  font-size: 0.88rem;
+  font-size: if($useSmallSize, 0.75rem, 0.88rem);
   font-weight: 500;
   color: $fontColor;
 }
