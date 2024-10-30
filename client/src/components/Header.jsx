@@ -11,7 +11,7 @@ const Header = () => {
         <h1 onClick={() => navigate("/")}>MeetHub</h1>
       </div>
       <div className="right-container">
-        <img src={userLogo} alt="" />
+        <img onClick={() => navigate("/profile")} src={userLogo} alt="" />
       </div>
     </div>
   );

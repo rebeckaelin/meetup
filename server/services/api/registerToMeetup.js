@@ -5,17 +5,39 @@ import { sendError, sendResponse } from "../utils/responses.js";
 import middy from "@middy/core";
 
 const registerToMeetup = async (event) => {
-  console.log(event);
+    console.log(event)
+
+    try {
+        const { meetupId } = JSON.parse(event.body)
+        const { userId } = event.user
+
+        if (!meetupId) {
+            return sendError(400, "MeetupId is missing")
+        }
+
 
   try {
     const { meetupId } = JSON.parse(event.body);
     const { userId } = event.user;
 
-    if (!meetupId) {
-      return sendError(400, "MeetupId is missing");
-    }
+        if (!meetup) {
+            return sendError(400, "Meetup not found")
+        }
 
-    const meetup = await getMeetup(meetupId);
+        if (meetup.participants.includes(userId)) {
+            return sendError(400, "User already registered for this meetup")
+        }
+
+        const updatedMeetup = await db.update({
+            TableName: "meetupTable",
+            Key: { meetupId },
+            UpdateExpression: "SET participants = list_append(participants, :newParticipant)",
+            ExpressionAttributeValues: {
+                ":newParticipant": [userId]
+            },
+            ReturnValues: "ALL_NEW"
+        })
+
 
     if (!meetup) {
       return sendError(400, "Meetup not found");
