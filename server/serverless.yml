@@ -58,12 +58,12 @@ functions:
           path: /meetups
           method: post
 
-  updateRegistration:
-    handler: services/api/updateRegistration.handler
+  filterMeetups:
+    handler: services/api/filterMeetups.handler
     events:
       - httpApi:
-          path: /meetups
-          method: put
+          path: /meetups/filtered
+          method: get
 
   removeRegistration:
     handler: services/api/removeRegistration.handler
