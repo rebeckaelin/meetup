@@ -1,4 +1,5 @@
 import { db } from "../data/db.js";
+import { getMeetup } from "../utils/getMeetup.js";
 import { verifyToken } from "../../middleware/verifyToken.js";
 import { sendError, sendResponse } from "../utils/responses.js";
 import middy from "@middy/core";
@@ -11,6 +12,20 @@ const registerToMeetup = async (event) => {
         const { meetupId } = JSON.parse(event.body)
         const { email } = event.user
 
+        if (!meetupId) {
+            return sendError(400, "MeetupId is missing")
+        }
+
+        const meetup = await getMeetup(meetupId)
+
+        if (!meetup) {
+            return sendError(400, "Meetup not found")
+        }
+
+        if (meetup.participants.includes(email)) {
+            return sendError(400, "User already registered for this meetup")
+        }
+
         const updatedMeetup = await db.update({
             TableName: "meetupTable",
             Key: { meetupId },
@@ -21,16 +36,12 @@ const registerToMeetup = async (event) => {
             ReturnValues: "ALL_NEW"
         })
 
-        console.log("Updated meetup:", updatedMeetup.Attributes)
-
         return sendResponse(200, updatedMeetup.Attributes)
-
 
     } catch (error) {
         console.error("Error registering meetup", error)
         return sendError(500, { message: "Error registering to meetup" , error: error.message})
     }
-
 }
 
 export const handler = middy()
