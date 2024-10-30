@@ -1,15 +1,17 @@
 import { db } from "../data/db.js";
 import { sendResponse, sendError } from "../utils/responses.js";
+import middy from "@middy/core";
+import { verifyToken } from "../../middleware/verifyToken.js";
 
-export const handler = async () => {
+export const getMeetups = async () => {
   try {
-    const getMeetups = await db.scan({
+    const getAllMeetups = await db.scan({
       TableName: "meetupTable",
     });
 
-    const meetups = getMeetups.Items;
+    const meetups = getAllMeetups.Items;
 
-    if (!meetups || meetups.Items.length === 0) {
+    if (!meetups || meetups.length === 0) {
       return sendError(404, "No meetups found in database.");
     }
 
@@ -22,3 +24,5 @@ export const handler = async () => {
     return sendError(500, "Server error.");
   }
 };
+
+export const handler = middy().handler(getMeetups).use(verifyToken);
