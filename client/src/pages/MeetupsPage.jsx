@@ -1,53 +1,62 @@
+import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import UpcommingMeetup from "../components/UpcomingMeetup";
 import "../sass/MeetUpsPage.scss";
-import { useState, useEffect, useRef } from "react";
 
 const MeetupsPage = () => {
   const [searchString, setSearchString] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
   const [fetchedData, setFetchedData] = useState([]);
   const [meetUpList, setMeetupList] = useState([]);
   const baseURL = "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com";
   const searchInputRef = useRef(null);
+  const dateInputRef = useRef(null);
 
-  //searchfunktion
-  const searchForMeetup = (e) => {
-    e.preventDefault();
-    if (searchString.length < 3) {
-      alert("search with atleast 3 charactrers");
-      setSearchString("");
-      setMeetupList([...fetchedData]);
+  //  filtrerar efter olika kriterier
+  const applyFilters = () => {
+    let filteredResults = fetchedData;
+
+    // filter på sökstring
+    if (searchString.length >= 3) {
+      const lowerCaseSearchString = searchString.toLowerCase();
+      filteredResults = filteredResults.filter((meetup) =>
+        ["date", "location", "host", "desc", "name", "time", "category"].some(
+          (key) => meetup[key]?.toLowerCase().includes(lowerCaseSearchString)
+        )
+      );
+    }
+    if (searchString && searchString.length < 3) {
+      alert("you must have atleast charaters on your search value");
       searchInputRef.current.value = "";
-      return;
+    }
+    // filter på category
+    if (selectedCategory && selectedCategory !== "all") {
+      filteredResults = filteredResults.filter(
+        (meetup) => meetup.category === selectedCategory
+      );
     }
 
-    //filtrera ut meetups som matchar searchstring
-    const lowerCaseSearchString = searchString.toLowerCase();
-    const searchResult = fetchedData.filter((meetup) =>
-      ["date", "location", "host", "desc", "name", "time", "category"].some(
-        (key) => meetup[key].toLowerCase().includes(lowerCaseSearchString)
-      )
-    );
-    //om det inte blir något resultat på filtreringen
-    if (!searchResult.length) {
-      alert("could not find what you are looking for");
-      setSearchString("");
-      setMeetupList([...fetchedData]);
-      searchInputRef.current.value = "";
-      return;
+    // filter på location
+    if (selectedLocation && selectedLocation !== "all") {
+      filteredResults = filteredResults.filter((meetup) =>
+        meetup.location.includes(selectedLocation)
+      );
     }
 
-    setMeetupList(searchResult);
-    setSearchString("");
+    // filter på date
+    if (selectedDate) {
+      filteredResults = filteredResults.filter((meetup) => {
+        const meetupDate = new Date(meetup.date);
+        const comparisonDate = new Date(selectedDate);
+        return meetupDate >= comparisonDate;
+      });
+    }
+
+    setMeetupList(filteredResults);
     searchInputRef.current.value = "";
-  };
-
-  //sök med category
-  const searchWithCategory = () => {
-    console.log("Selected Category:", selectedCategory);
-    //rendera ut lista
   };
 
   const getData = async () => {
@@ -57,46 +66,86 @@ const MeetupsPage = () => {
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
-      console.log("data", data);
       setFetchedData(data.meetups);
       setMeetupList(data.meetups);
-      console.log("fetchedData", fetchedData);
     } catch (err) {
       console.error(err);
     }
   };
+
+  //fetchar data från db vid inladdning på sidan
   useEffect(() => {
     getData();
   }, []);
 
+  // trigga applyfilters när någon av states förändras
+  useEffect(() => {
+    applyFilters();
+  }, [searchString, selectedCategory, selectedLocation, selectedDate]);
+
+  // skapar unika alternativ för location baserat på fetchedData
+  const uniqueLocations = Array.from(
+    new Set(
+      fetchedData
+        .map((meetup) => meetup.location?.split(",")[1]?.trim())
+        .filter((city) => city)
+    )
+  );
+
   return (
     <div className="meetupsPageWrapper">
       <Header />
-
       <div className="searchContainer">
-        <form onSubmit={(e) => searchForMeetup(e)} action="submit">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setSearchString(searchInputRef.current.value);
+          }}
+          action="submit"
+        >
           <input
             ref={searchInputRef}
-            onChange={(e) => setSearchString(e.target.value)}
             type="text"
             placeholder="search meetup.."
           />
           <button>search</button>
         </form>
+        <label htmlFor="sortBy">sort by:</label>
         <div className="categoryContainer">
-          <label htmlFor="category">sort by:</label>
+          <label htmlFor="category">category:</label>
           <select
-            onChange={(e) => {
-              setSelectedCategory(e.target.value), searchWithCategory(e);
-            }}
+            onChange={(e) => setSelectedCategory(e.target.value)}
             name="category"
-            id=""
           >
             <option value="all">all</option>
-            <option value="category2">category2</option>
-            <option value="category3">category3</option>
-            <option value="category4">category4</option>
+            <option value="film">film</option>
+            <option value="musik">musik</option>
+            <option value="utomhus">utomhus</option>
+            <option value="marknad">marknad</option>
+            <option value="hälsa">hälsa</option>
+            <option value="litteratur">litteratur</option>
           </select>
+          <label htmlFor="location">location:</label>
+          <select
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            name="location"
+          >
+            <option value="all">All</option>
+            {uniqueLocations.map((city, index) => (
+              <option key={index} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="start">Start date:</label>
+          <input
+            ref={dateInputRef}
+            type="date"
+            name="start"
+            min={new Date().toISOString().split("T")[0]}
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
         </div>
       </div>
       <div className="meetupsWrapper">
