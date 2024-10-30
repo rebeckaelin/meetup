@@ -4,53 +4,37 @@ import { hashPassword } from "../utils/hashPassword.js";
 import { findUser } from "../utils/findUser.js";
 import {
   parseAndValidateBody,
+  parseAndValidateUserData,
   validateEmailAndPassword,
 } from "../utils/validators.js";
+import { sendError, sendResponse } from "../utils/responses.js";
 
 export const handler = async (event) => {
   let email, password, hashedPassword;
 
   try {
-    ({ email, password } = await parseAndValidateBody(event));
+    ({ email, password } = await parseAndValidateUserData(event));
   } catch (error) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ success: false, message: error.message }),
-    };
+    return sendError(400, error.message);
   }
 
   try {
     await validateEmailAndPassword(email, password);
   } catch (error) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ success: false, message: error.message }),
-    };
+    return sendError(400, error.message);
   }
 
   try {
     hashedPassword = await hashPassword(password);
   } catch (error) {
-    console.error("hashing:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        success: false,
-        message: "Error while hashing password",
-      }),
-    };
+    console.error("error while hashing:", error);
+    return sendError(500, "Error while hashing password.");
   }
 
   try {
     const userExists = await findUser(email);
     if (userExists) {
-      return {
-        statusCode: 409,
-        body: JSON.stringify({
-          success: false,
-          message: "An account with this email already exists.",
-        }),
-      };
+      return sendError(409, "An account with this email already exists.");
     }
     const newUser = {
       userId: uuid(),
@@ -62,15 +46,9 @@ export const handler = async (event) => {
       TableName: "meetupUsersTable",
       Item: newUser,
     });
-    return {
-      statusCode: 201,
-      body: JSON.stringify({ success: true }),
-    };
+    return sendResponse(201);
   } catch (error) {
-    console.error("bottom:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ success: false }),
-    };
+    console.error("error:", error);
+    return sendError(500, "Server error");
   }
 };

@@ -14,13 +14,13 @@ const filterMeetups = async (event) => {
       },
     };
 
-    const data = await db.scan(findParticipant);
-    const foundMeetups = data.Items;
+    const getMeetups = await db.scan(findParticipant);
+    const foundMeetups = getMeetups.Items;
 
     return sendResponse(200, foundMeetups);
   } catch (error) {
     console.log("error:", error);
-    return sendError(500, "Error");
+    return sendError(500, "Server error");
   }
 };
 

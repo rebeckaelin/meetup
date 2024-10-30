@@ -11,10 +11,7 @@ const postReview = async (event) => {
   try {
     ({ comment, rating, meetupId } = await parseReviewBody(event));
   } catch (error) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ success: false, message: error.message }),
-    };
+    return sendError(400, error.message);
   }
 
   try {

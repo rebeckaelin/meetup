@@ -3,29 +3,28 @@ import { getMeetup } from "../utils/getMeetup.js";
 import { verifyToken } from "../../middleware/verifyToken.js";
 import { sendError, sendResponse } from "../utils/responses.js";
 import middy from "@middy/core";
+import { simpleParse } from "../utils/validators.js";
 
 const registerToMeetup = async (event) => {
-  console.log(event);
-
   try {
-    const { meetupId } = JSON.parse(event.body);
+    const { meetupId } = await simpleParse(event);
     const { userId } = event.user;
 
     if (!meetupId) {
-      return sendError(400, "MeetupId is missing");
+      return sendError(400, "MeetupId is missing.");
     }
 
     const meetup = await getMeetup(meetupId);
 
     if (!meetup) {
-      return sendError(400, "Meetup not found");
+      return sendError(400, "Meetup not found.");
     }
 
     if (meetup.participants.includes(userId)) {
-      return sendError(400, "User already registered for this meetup");
+      return sendError(400, "User already registered for this meetup.");
     }
 
-    const updatedMeetup = await db.update({
+    const updateMeetup = await db.update({
       TableName: "meetupTable",
       Key: { meetupId },
       UpdateExpression:
@@ -36,13 +35,15 @@ const registerToMeetup = async (event) => {
       ReturnValues: "ALL_NEW",
     });
 
-    return sendResponse(200, updatedMeetup.Attributes);
+    const updatedMeetup = updateMeetup.Attributes;
+
+    return sendResponse(200, updatedMeetup);
   } catch (error) {
+    if (error.message === "Invalid JSON format.") {
+      return sendError(400, error.message);
+    }
     console.error("Error registering meetup", error);
-    return sendError(500, {
-      message: "Error registering to meetup",
-      error: error.message,
-    });
+    return sendError(500, "Error registering to meetup");
   }
 };
 

@@ -29,6 +29,9 @@ export const handler = async (event) => {
     return sendResponse(201);
   } catch (error) {
     console.log("error:", error);
+    if (error.message === "Invalid JSON format.") {
+      return sendError(400, error.message);
+    }
     return sendError(500, "Server error");
   }
 };
