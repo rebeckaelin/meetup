@@ -30,7 +30,7 @@
   & ::placeholder {
     color: $black;
   }
-  & button {
+  & .searchBtn {
     padding: 0.7rem;
     @include setButtonStyle($white, $dimBlue);
   }
@@ -58,4 +58,19 @@
 .meetupsWrapper {
   @include setDisplayFlex($column);
   min-height: 350px;
+}
+.clearContainer {
+  @include setDisplayFlex($row);
+  align-items: center;
+  margin: 0;
+
+  justify-content: space-between;
+}
+.clearBtn {
+  @include setButtonStyle($black, $white);
+  padding: 0.3rem;
+  margin: 0;
+}
+.dateInput {
+  margin: 0;
 }

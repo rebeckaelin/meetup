@@ -5,6 +5,7 @@ import UpcommingMeetup from "../components/UpcomingMeetup";
 import "../sass/MeetUpsPage.scss";
 
 const MeetupsPage = () => {
+  const token = sessionStorage.getItem("userToken");
   const [searchString, setSearchString] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -14,25 +15,11 @@ const MeetupsPage = () => {
   const baseURL = "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com";
   const searchInputRef = useRef(null);
   const dateInputRef = useRef(null);
-
+  const categoryRef = useRef(null);
+  const locationRef = useRef(null);
   //  filtrerar efter olika kriterier
   const applyFilters = () => {
     let filteredResults = fetchedData;
-
-    // filter på sökstring
-    if (searchString.length >= 3) {
-      const lowerCaseSearchString = searchString.toLowerCase();
-      filteredResults = filteredResults.filter((meetup) =>
-        ["date", "location", "host", "desc", "name", "time", "category"].some(
-          (key) => meetup[key]?.toLowerCase().includes(lowerCaseSearchString)
-        )
-      );
-    }
-    if (searchString && searchString.length < 3) {
-      alert("you must have atleast charaters on your search value");
-      searchInputRef.current.value = "";
-    }
-    // filter på category
     if (selectedCategory && selectedCategory !== "all") {
       filteredResults = filteredResults.filter(
         (meetup) => meetup.category === selectedCategory
@@ -56,21 +43,55 @@ const MeetupsPage = () => {
     }
 
     setMeetupList(filteredResults);
-    searchInputRef.current.value = "";
   };
 
   const getData = async () => {
     try {
       const res = await fetch(`${baseURL}/meetups`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
-      const data = await res.json();
-      setFetchedData(data.meetups);
-      setMeetupList(data.meetups);
+      const { data } = await res.json();
+      console.log("data", data);
+      setFetchedData(data);
+      setMeetupList(data);
     } catch (err) {
       console.error(err);
     }
+  };
+  const searchForMeetup = (e) => {
+    e.preventDefault();
+    console.log(searchString);
+    if (searchString.length < 3) {
+      alert("search with atleast 3 charactrers");
+      setSearchString("");
+      setMeetupList([...fetchedData]);
+      searchInputRef.current.value = "";
+      return;
+    }
+
+    //filtrera ut meetups som matchar searchstring
+    const lowerCaseSearchString = searchString.toLowerCase();
+    const searchResult = fetchedData.filter((meetup) =>
+      ["date", "location", "host", "desc", "name", "time", "category"].some(
+        (key) => meetup[key].toLowerCase().includes(lowerCaseSearchString)
+      )
+    );
+    //om det inte blir något resultat på filtreringen
+    if (!searchResult.length) {
+      alert("could not find what you are looking for");
+      setSearchString("");
+      setMeetupList([...fetchedData]);
+      searchInputRef.current.value = "";
+      return;
+    }
+
+    setMeetupList(searchResult);
+    setSearchString("");
+    searchInputRef.current.value = "";
   };
 
   //fetchar data från db vid inladdning på sidan
@@ -78,10 +99,9 @@ const MeetupsPage = () => {
     getData();
   }, []);
 
-  // trigga applyfilters när någon av states förändras
   useEffect(() => {
     applyFilters();
-  }, [searchString, selectedCategory, selectedLocation, selectedDate]);
+  }, [selectedCategory, selectedLocation, selectedDate]);
 
   // skapar unika alternativ för location baserat på fetchedData
   const uniqueLocations = Array.from(
@@ -91,31 +111,45 @@ const MeetupsPage = () => {
         .filter((city) => city)
     )
   );
-
+  const clearFilter = () => {
+    setSelectedLocation("");
+    setSelectedDate("");
+    setSelectedCategory("");
+    dateInputRef.current.value = "";
+    locationRef.current.value = "all";
+    categoryRef.current.value = "all";
+    setMeetupList(fetchedData);
+  };
   return (
     <div className="meetupsPageWrapper">
       <Header />
       <div className="searchContainer">
         <form
           onSubmit={(e) => {
-            e.preventDefault();
-            setSearchString(searchInputRef.current.value);
+            searchForMeetup(e);
           }}
           action="submit"
         >
           <input
             ref={searchInputRef}
+            onChange={(e) => setSearchString(e.target.value)}
             type="text"
             placeholder="search meetup.."
           />
-          <button>search</button>
+          <button className="searchBtn">search</button>
         </form>
-        <label htmlFor="sortBy">sort by:</label>
+        <div className="clearContainer">
+          <label htmlFor="sortBy">sort by:</label>
+          <button onClick={clearFilter} className="clearBtn">
+            clear filter
+          </button>
+        </div>
         <div className="categoryContainer">
           <label htmlFor="category">category:</label>
           <select
             onChange={(e) => setSelectedCategory(e.target.value)}
             name="category"
+            ref={categoryRef}
           >
             <option value="all">all</option>
             <option value="film">film</option>
@@ -129,8 +163,9 @@ const MeetupsPage = () => {
           <select
             onChange={(e) => setSelectedLocation(e.target.value)}
             name="location"
+            ref={locationRef}
           >
-            <option value="all">All</option>
+            <option value="all">all</option>
             {uniqueLocations.map((city, index) => (
               <option key={index} value={city}>
                 {city}
@@ -145,6 +180,7 @@ const MeetupsPage = () => {
             min={new Date().toISOString().split("T")[0]}
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
+            className="dateInput"
           />
         </div>
       </div>
