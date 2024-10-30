@@ -18,7 +18,7 @@ const MeetupsPage = () => {
   const applyFilters = () => {
     let filteredResults = fetchedData;
 
-    // Filter på söksträngen
+    // filter på sökstring
     if (searchString.length >= 3) {
       const lowerCaseSearchString = searchString.toLowerCase();
       filteredResults = filteredResults.filter((meetup) =>
@@ -28,21 +28,21 @@ const MeetupsPage = () => {
       );
     }
 
-    // Filter på kategori
+    // filter på category
     if (selectedCategory && selectedCategory !== "all") {
       filteredResults = filteredResults.filter(
         (meetup) => meetup.category === selectedCategory
       );
     }
 
-    // Filter på plats
+    // filter på location
     if (selectedLocation && selectedLocation !== "all") {
       filteredResults = filteredResults.filter((meetup) =>
         meetup.location.includes(selectedLocation)
       );
     }
 
-    // Filter på datum
+    // filter på date
     if (selectedDate) {
       filteredResults = filteredResults.filter((meetup) => {
         const meetupDate = new Date(meetup.date);
@@ -54,7 +54,6 @@ const MeetupsPage = () => {
     setMeetupList(filteredResults);
   };
 
-  // Hämta data från API och spara i state
   const getData = async () => {
     try {
       const res = await fetch(`${baseURL}/meetups`, {
