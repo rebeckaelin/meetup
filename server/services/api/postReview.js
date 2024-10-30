@@ -1,4 +1,4 @@
-import { sendError } from "../utils/responses.js";
+import { sendError, sendResponse } from "../utils/responses.js";
 import { db } from "../data/db.js";
 import middy from "@middy/core";
 import { verifyToken } from "../../middleware/verifyToken.js";
@@ -30,10 +30,7 @@ const postReview = async (event) => {
 
     await db.put(newReview);
 
-    return {
-      statusCode: 201,
-      body: JSON.stringify({ success: true }),
-    };
+    return sendResponse(201);
   } catch (error) {
     console.error("Server error:", error);
     return sendError(500, "Server error");

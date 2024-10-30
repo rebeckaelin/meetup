@@ -5,6 +5,7 @@ import {
   parseAndValidateBody,
   validateEmailAndPassword,
 } from "../utils/validators.js";
+import { sendResponse, sendError } from "../utils/responses.js";
 
 export const handler = async (event) => {
   let email, password;
@@ -44,7 +45,9 @@ export const handler = async (event) => {
 
     const correctPassword = await comparePassword(password, user);
     if (!correctPassword) {
-      return {
+      return
+      sendError(401, "Wrong email or password.")
+      {
         statusCode: 401,
         body: JSON.stringify({
           success: false,
@@ -53,17 +56,11 @@ export const handler = async (event) => {
       };
     }
 
-    const token = generateToken({ userId: user.userId, email: user.email })
+    const token = generateToken({ userId: user.userId, email: user.email });
 
-    return {
-      statusCode: 201,
-      body: JSON.stringify({ success: true, token }),
-    };
+    return sendResponse(200, token);
   } catch (error) {
-    console.error("bottom:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ success: false }),
-    };
+    console.log("error:", error);
+    return sendError(500, "Server error");
   }
 };
