@@ -10,7 +10,7 @@ const registerToMeetup = async (event) => {
 
     try {
         const { meetupId } = JSON.parse(event.body)
-        const { email } = event.user
+        const { userId } = event.user
 
         if (!meetupId) {
             return sendError(400, "MeetupId is missing")
@@ -22,7 +22,7 @@ const registerToMeetup = async (event) => {
             return sendError(400, "Meetup not found")
         }
 
-        if (meetup.participants.includes(email)) {
+        if (meetup.participants.includes(userId)) {
             return sendError(400, "User already registered for this meetup")
         }
 
@@ -31,7 +31,7 @@ const registerToMeetup = async (event) => {
             Key: { meetupId },
             UpdateExpression: "SET participants = list_append(participants, :newParticipant)",
             ExpressionAttributeValues: {
-                ":newParticipant": [email]
+                ":newParticipant": [userId]
             },
             ReturnValues: "ALL_NEW"
         })
