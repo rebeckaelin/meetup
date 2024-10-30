@@ -3,11 +3,15 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const StartPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPsw, setLoginPsw] = useState("");
+  const navigate = useNavigate();
 
   const baseURL = "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com";
 
@@ -38,16 +42,53 @@ const StartPage = () => {
     }
   };
 
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const user = { email: loginEmail, password: loginPsw };
+      const request = await fetch(`${baseURL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+      const data = await request.json();
+      console.log("data", data);
+      sessionStorage.setItem("userToken", data.data);
+
+      if (data.success) {
+        setLoginEmail("");
+        setLoginPsw("");
+        // navigate("/meetups");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="startPageMainContainer">
       <Header />
       <div className="loginBox">
         <h2 className="loginTitle">Login</h2>
-        <form className="loginForm">
-          <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" />
-          <label htmlFor="password">Password</label>
-          <input type="text" name="password" id="password" />
+        <form className="loginForm" onSubmit={handleSignIn}>
+          <label htmlFor="loginEmail">Email</label>
+          <input
+            type="email"
+            name="loginEmail"
+            id="loginEmail"
+            value={loginEmail}
+            autoComplete="off"
+            onChange={(e) => setLoginEmail(e.target.value)}
+          />
+          <label htmlFor="loginPassword">Password</label>
+          <input
+            type="password"
+            name="loginPassword"
+            id="loginPassword"
+            value={loginPsw}
+            autoComplete="off"
+            onChange={(e) => setLoginPsw(e.target.value)}
+          />
           <div className="formButtons">
             <button className="buttonOne" type="submit">
               LOGIN
