@@ -42,7 +42,7 @@ export const parseReviewBody = async (event) => {
     throw new Error("Invalid JSON format.");
   }
 
-  const { comment, rating } = parsedBody;
+  const { comment, rating, meetupId } = parsedBody;
 
   const numericRating = Number(rating);
   if (isNaN(numericRating)) {
@@ -56,5 +56,5 @@ export const parseReviewBody = async (event) => {
     throw new Error("Comment is required.");
   }
 
-  return { comment, rating };
+  return { comment, rating, meetupId };
 };

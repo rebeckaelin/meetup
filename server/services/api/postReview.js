@@ -9,7 +9,7 @@ const postReview = async (event) => {
   const userId = event.user.userId;
 
   try {
-    ({ comment, rating } = await parseReviewBody(event));
+    ({ comment, rating, meetupId } = await parseReviewBody(event));
   } catch (error) {
     return {
       statusCode: 400,
@@ -27,7 +27,6 @@ const postReview = async (event) => {
         rating,
       },
     };
-    console.log(newReview);
 
     await db.put(newReview);
 
@@ -36,8 +35,8 @@ const postReview = async (event) => {
       body: JSON.stringify({ success: true }),
     };
   } catch (error) {
-    console.error("bottom:", error);
-    return sendError(500, "Error");
+    console.error("Server error:", error);
+    return sendError(500, "Server error");
   }
 };
 
