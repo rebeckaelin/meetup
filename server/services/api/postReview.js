@@ -5,7 +5,7 @@ import { verifyToken } from "../../middleware/verifyToken.js";
 import { parseReviewBody } from "../utils/validators.js";
 
 const postReview = async (event) => {
-  let comment, rating;
+  let comment, rating, meetupId;
   const userId = event.user.userId;
 
   try {
@@ -21,7 +21,7 @@ const postReview = async (event) => {
     const newReview = {
       TableName: "meetupReviewsTable",
       Item: {
-        meetupId: "1",
+        meetupId,
         userId,
         comment,
         rating,

@@ -52,9 +52,9 @@ export const parseReviewBody = async (event) => {
     throw new Error("Rating must be between 1 and 5.");
   }
 
-  // if (!comment || comment.trim() === "") {
-  //   throw new Error("Comment is required.");
-  // }
+  if (!comment || comment.trim() === "") {
+    throw new Error("Comment is required.");
+  }
 
   return { comment, rating };
 };
