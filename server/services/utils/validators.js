@@ -17,12 +17,11 @@ export const validateEmailAndPassword = async (email, password) => {
   }
 };
 
-export const parseAndValidateBody = async (event) => {
+export const parseAndValidateUserData = async (event) => {
   let parsedBody;
   try {
     parsedBody = JSON.parse(event.body);
   } catch (error) {
-    console.error("3:", error);
     throw new Error("Invalid JSON format.");
   }
 
@@ -57,4 +56,14 @@ export const parseReviewBody = async (event) => {
   }
 
   return { comment, rating, meetupId };
+};
+
+export const simpleParse = async (event) => {
+  let parsedBody;
+  try {
+    parsedBody = JSON.parse(event.body);
+  } catch (error) {
+    throw new Error("Invalid JSON format.");
+  }
+  return parsedBody;
 };

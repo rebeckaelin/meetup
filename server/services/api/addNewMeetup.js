@@ -1,11 +1,11 @@
-import { sendError } from "../utils/responses.js";
+import { sendResponse, sendError } from "../utils/responses.js";
 import { db } from "../data/db.js";
 import { v4 as uuid } from "uuid";
+import { simpleParse } from "../utils/validators.js";
 
 export const handler = async (event) => {
-  const { name, date, time, location, host, desc, category } = JSON.parse(
-    event.body
-  );
+  const { name, date, time, location, host, desc, category } =
+    await simpleParse(event);
 
   try {
     const newMeetup = {
@@ -24,16 +24,14 @@ export const handler = async (event) => {
       },
     };
     console.log(newMeetup);
-
     await db.put(newMeetup);
 
-    return {
-      statusCode: 201,
-      body: JSON.stringify({ success: true }),
-    };
+    return sendResponse(201);
   } catch (error) {
-    console.error("bottom:", error);
-
-    return sendError(500, "Error");
+    console.log("error:", error);
+    if (error.message === "Invalid JSON format.") {
+      return sendError(400, error.message);
+    }
+    return sendError(500, "Server error");
   }
 };

@@ -2,68 +2,42 @@ import { comparePassword } from "../utils/comparePassword.js";
 import { generateToken } from "../utils/generateToken.js";
 import { findUser } from "../utils/findUser.js";
 import {
-  parseAndValidateBody,
+  parseAndValidateUserData,
   validateEmailAndPassword,
 } from "../utils/validators.js";
+import { sendResponse, sendError } from "../utils/responses.js";
 
 export const handler = async (event) => {
   let email, password;
   try {
-    ({ email, password } = await parseAndValidateBody(event));
+    ({ email, password } = await parseAndValidateUserData(event));
   } catch (error) {
-    console.error("1:", error);
-
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ success: false, message: error.message }),
-    };
+    return sendError(400, error.message);
   }
 
   try {
     await validateEmailAndPassword(email, password);
   } catch (error) {
-    console.error("2:", error);
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ success: false, message: error.message }),
-    };
+    return sendError(400, error.message);
   }
 
   try {
     const user = await findUser(email);
 
     if (!user) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          success: false,
-          message: "Wrong email or password",
-        }),
-      };
+      return sendError(401, "Wrong email or password");
     }
 
     const correctPassword = await comparePassword(password, user);
     if (!correctPassword) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          success: false,
-          message: "Wrong email or password",
-        }),
-      };
+      return sendError(401, "Wrong email or password");
     }
 
-    const token = generateToken({ userId: user.userId, email: user.email })
+    const token = generateToken({ userId: user.userId, email: user.email });
 
-    return {
-      statusCode: 201,
-      body: JSON.stringify({ success: true, token }),
-    };
+    return sendResponse(200, token);
   } catch (error) {
-    console.error("bottom:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ success: false }),
-    };
+    console.log("error:", error);
+    return sendError(500, "Server error");
   }
 };
