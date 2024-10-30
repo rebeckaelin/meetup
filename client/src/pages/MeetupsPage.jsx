@@ -13,6 +13,7 @@ const MeetupsPage = () => {
   const [meetUpList, setMeetupList] = useState([]);
   const baseURL = "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com";
   const searchInputRef = useRef(null);
+  const dateInputRef = useRef(null);
 
   //  filtrerar efter olika kriterier
   const applyFilters = () => {
@@ -27,7 +28,10 @@ const MeetupsPage = () => {
         )
       );
     }
-
+    if (searchString && searchString.length < 3) {
+      alert("you must have atleast charaters on your search value");
+      searchInputRef.current.value = "";
+    }
     // filter på category
     if (selectedCategory && selectedCategory !== "all") {
       filteredResults = filteredResults.filter(
@@ -52,6 +56,7 @@ const MeetupsPage = () => {
     }
 
     setMeetupList(filteredResults);
+    searchInputRef.current.value = "";
   };
 
   const getData = async () => {
@@ -78,7 +83,7 @@ const MeetupsPage = () => {
     applyFilters();
   }, [searchString, selectedCategory, selectedLocation, selectedDate]);
 
-  // Skapar unika alternativ för location baserat på fetchedData
+  // skapar unika alternativ för location baserat på fetchedData
   const uniqueLocations = Array.from(
     new Set(
       fetchedData
@@ -134,9 +139,10 @@ const MeetupsPage = () => {
           </select>
           <label htmlFor="start">Start date:</label>
           <input
+            ref={dateInputRef}
             type="date"
             name="start"
-            min={new Date().toISOString().split("T")[0]} // Ställ in min-datum till dagens datum
+            min={new Date().toISOString().split("T")[0]}
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
           />
