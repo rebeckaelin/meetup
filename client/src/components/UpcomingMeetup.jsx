@@ -28,6 +28,7 @@ const UpcomingMeetup = ({ meetupDetails }) => {
 
       {isOpen && (
         <div className="additionalContent">
+          <p className="desc">{meetupDetails.desc}</p>
           <p>
             <strong>Datum:</strong> {meetupDetails.date}
           </p>
@@ -41,7 +42,7 @@ const UpcomingMeetup = ({ meetupDetails }) => {
             <strong>Värd:</strong> {meetupDetails.host}
           </p>
           <p>
-            <strong>Number of participants: </strong>
+            <strong>Participants: </strong>
             {meetupDetails.numberOfParticipants}
           </p>
         </div>
@@ -52,12 +53,16 @@ const UpcomingMeetup = ({ meetupDetails }) => {
 
 UpcomingMeetup.propTypes = {
   meetupDetails: PropTypes.shape({
+    desc: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
     host: PropTypes.string.isRequired,
-    numberOfParticipants: PropTypes.string.isRequired,
+    numberOfParticipants: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
   }).isRequired,
 };
 
