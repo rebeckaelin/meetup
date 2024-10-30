@@ -3,7 +3,6 @@ import { v4 as uuid } from "uuid";
 import { hashPassword } from "../utils/hashPassword.js";
 import { findUser } from "../utils/findUser.js";
 import {
-  parseAndValidateBody,
   parseAndValidateUserData,
   validateEmailAndPassword,
 } from "../utils/validators.js";

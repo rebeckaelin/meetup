@@ -9,7 +9,7 @@ export const handler = async () => {
 
     const meetups = getMeetups.Items;
 
-    if (!meetups || meetups.Items.length === 0) {
+    if (!meetups || meetups.length === 0) {
       return sendError(404, "No meetups found in database.");
     }
 
