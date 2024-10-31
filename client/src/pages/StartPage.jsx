@@ -16,7 +16,7 @@ const StartPage = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const navigate = useNavigate();
 
-  const baseURL = "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com";
+  const baseURL = "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/";
 
   useEffect(() => {
     setIsButtonDisabled(password !== comparePsw || password === "");
@@ -62,8 +62,8 @@ const StartPage = () => {
       });
       const data = await request.json();
       console.log("data", data);
-      sessionStorage.setItem("userToken", data.data);
-
+      sessionStorage.setItem("userToken", data.data.token);
+      sessionStorage.setItem("user", data.data.userId);
       if (data.success) {
         setLoginEmail("");
         setLoginPsw("");

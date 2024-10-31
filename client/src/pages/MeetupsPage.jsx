@@ -12,7 +12,7 @@ const MeetupsPage = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [fetchedData, setFetchedData] = useState([]);
   const [meetUpList, setMeetupList] = useState([]);
-  const baseURL = "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com";
+  const baseURL = "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/";
   const searchInputRef = useRef(null);
   const dateInputRef = useRef(null);
   const categoryRef = useRef(null);
