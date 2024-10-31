@@ -74,11 +74,9 @@ const StartPage = () => {
     }
   };
 
-  // hideContent={true}
-
   return (
     <div className="startPageMainContainer">
-      <Header userLogoSrc={userLogo} />
+      <Header userLogoSrc={userLogo} hideContent={true} />
       <div className="loginBox">
         <h2 className="loginTitle">LOGIN</h2>
         <form className="loginForm" onSubmit={handleSignIn}>
