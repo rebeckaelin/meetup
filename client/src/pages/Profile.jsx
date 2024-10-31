@@ -13,9 +13,19 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchMeetups = async () => {
+      console.log("Updated upcomingMeetups:", upcomingMeetups);
+      console.log("Updated oldMeetups:", oldMeetups);
+      const token = sessionStorage.getItem("userToken");
       try {
         const response = await fetch(
-          "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com/meetups"
+          "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com/meetups",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (!response.ok) {
           throw new Error("Failed to fetch meetups data");
@@ -23,13 +33,20 @@ const Profile = () => {
         const data = await response.json();
         console.log("Fetched data:", data);
 
-        const meetups = Array.isArray(data) ? data : data.meetups || [];
+        const meetups = Array.isArray(data.data) ? data.data : [];
 
-        const today = new Date("2024-11-10");
-        const upcoming = meetups.filter(
-          (meetup) => new Date(meetup.date) >= today
-        );
-        const old = meetups.filter((meetup) => new Date(meetup.date) < today);
+        const today = new Date();
+        const upcoming = meetups.filter((meetup) => {
+          const meetupDate = new Date(meetup.date);
+
+          return meetupDate >= today;
+        });
+
+        const old = meetups.filter((meetup) => {
+          const meetupDate = new Date(meetup.date);
+
+          return meetupDate < today;
+        });
 
         setUpcomingMeetups(upcoming);
         setOldMeetups(old);
