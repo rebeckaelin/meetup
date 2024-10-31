@@ -33,10 +33,10 @@ import middy from "@middy/core";
         return sendResponse(200, Items)
     } catch (error) {
         console.error("Error:", error)
-        return sendError(500, {message: "Failed to retrieve reviews", error: error.message})
+        return sendError(500, "Failed to retrieve reviews")
     }
 }
 
-export const handler = middy()
+export const handler = middy() 
     .handler(getReviews)
     .use(verifyToken)
