@@ -6,6 +6,10 @@ import PropTypes from "prop-types";
 const UpcomingMeetup = ({ meetupDetails }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const reloadPage = () => {
+    window.location.reload();
+  };
+
   const handleImageClick = () => {
     const newIsOpen = !isOpen;
     setIsOpen(newIsOpen);
@@ -26,6 +30,7 @@ const UpcomingMeetup = ({ meetupDetails }) => {
         }
       );
       const data = await res.json();
+      reloadPage();
       console.log("fetched data", data);
     } catch (error) {
       console.log(error);
@@ -48,6 +53,7 @@ const UpcomingMeetup = ({ meetupDetails }) => {
         }
       );
       const data = await res.json();
+      reloadPage();
       console.log("fetched data", data);
     } catch (error) {
       console.log(error);
@@ -73,23 +79,23 @@ const UpcomingMeetup = ({ meetupDetails }) => {
         <div className="additionalContent">
           <p className="desc">{meetupDetails.desc}</p>
           <p>
-            <strong>Datum:</strong> {meetupDetails.date}
+            <strong>Date:</strong> {meetupDetails.date}
           </p>
           <p>
-            <strong>Tid:</strong> {meetupDetails.time}
+            <strong>Time:</strong> {meetupDetails.time}
           </p>
           <p>
-            <strong>Plats:</strong> {meetupDetails.location}
+            <strong>Location:</strong> {meetupDetails.location}
           </p>
           <p>
-            <strong>Värd:</strong> {meetupDetails.host}
+            <strong>Host:</strong> {meetupDetails.host}
           </p>
           <p>
-            <strong>Deltagare: </strong>
+            <strong>Participants: </strong>
             {meetupDetails.participants.length}
           </p>
           <p>
-            <strong>Platser: </strong>
+            <strong>Seats: </strong>
             {meetupDetails.seats}
           </p>
           <button onClick={handleBooking}>
@@ -113,7 +119,7 @@ UpcomingMeetup.propTypes = {
     location: PropTypes.string.isRequired,
     host: PropTypes.string.isRequired,
     meetupId: PropTypes.string,
-    participants: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    participants: PropTypes.array,
     seats: PropTypes.number,
   }).isRequired,
 };

@@ -2,7 +2,7 @@ import "../sass/UpcommingMeetup.scss";
 import expandarrow from "../assets/expand-arrow.png";
 import { useState } from "react";
 import PropTypes from "prop-types";
-
+import Reviews from "./Reviews";
 const OldMeetup = ({ eventDetails }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [toggleReview, setToggleReview] = useState(false);
@@ -38,11 +38,12 @@ const OldMeetup = ({ eventDetails }) => {
         <div className="additionalContent">
           <p className="desc">{desc}</p>
           <p>
-            <strong>Plats:</strong> {location}
+            <strong>Location:</strong> {location}
           </p>
           <p>
-            <strong>Värd:</strong> {host}
+            <strong>Host:</strong> {host}
           </p>
+          <p>Leave a review</p>
           <img
             src={expandarrow}
             alt="Expand More"
@@ -55,14 +56,15 @@ const OldMeetup = ({ eventDetails }) => {
           {toggleReview && (
             <div>
               <p>
-                <strong>Snittbetyg:</strong> {averageRating}
+                <strong>Average:</strong> {averageRating}
               </p>
-              <h4>Recensioner:</h4>
+              <h4>Reviews:</h4>
               <ul>
                 {reviews.map((review, reviewIndex) => (
                   <li key={reviewIndex}>{review}</li>
                 ))}
               </ul>
+              <Reviews meetupId={eventDetails.meetupId} />
             </div>
           )}
         </div>
@@ -78,8 +80,9 @@ OldMeetup.propTypes = {
     location: PropTypes.string.isRequired,
     host: PropTypes.string.isRequired,
     averageRating: PropTypes.number,
+    meetupId: PropTypes.string.isRequired,
     reviews: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
+  }),
 };
 
 export default OldMeetup;
