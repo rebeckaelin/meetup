@@ -18,7 +18,7 @@ const Profile = () => {
       const token = sessionStorage.getItem("userToken");
       try {
         const response = await fetch(
-          "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/filtered",
+          "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups/filtered",
           {
             method: "GET",
             headers: {

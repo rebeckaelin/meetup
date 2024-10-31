@@ -15,7 +15,7 @@ const UpcomingMeetup = ({ meetupDetails }) => {
     const token = sessionStorage.getItem("userToken");
     try {
       const res = await fetch(
-        "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups",
+        "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups/registration",
         {
           method: "POST",
           headers: {
@@ -37,7 +37,7 @@ const UpcomingMeetup = ({ meetupDetails }) => {
     try {
       const res = await fetch(
         //Byt ut Länken Nedanför ----->
-        "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups",
+        "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups/registration",
         {
           method: "PUT",
           headers: {
