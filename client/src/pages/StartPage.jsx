@@ -87,6 +87,7 @@ const StartPage = () => {
             id="loginEmail"
             value={loginEmail}
             autoComplete="off"
+            required
             onChange={(e) => setLoginEmail(e.target.value)}
           />
           <label htmlFor="loginPassword">Password</label>
@@ -96,6 +97,7 @@ const StartPage = () => {
             id="loginPassword"
             value={loginPsw}
             autoComplete="off"
+            required
             onChange={(e) => setLoginPsw(e.target.value)}
           />
           <div className="formButtons">
@@ -117,6 +119,7 @@ const StartPage = () => {
                 name="email"
                 id="email"
                 autoComplete="off"
+                required
                 onChange={(e) => setEmail(e.target.value)}
               />
               <label htmlFor="password">Password</label>
@@ -126,6 +129,7 @@ const StartPage = () => {
                 name="password"
                 id="password"
                 autoComplete="off"
+                required
                 onChange={(e) => setPassword(e.target.value)}
               />
               <label htmlFor="password">Confirm password</label>
@@ -135,6 +139,7 @@ const StartPage = () => {
                 id="checkpassword"
                 value={comparePsw}
                 autoComplete="off"
+                required
                 onChange={(e) => setComparePsw(e.target.value)}
               />
               <button
