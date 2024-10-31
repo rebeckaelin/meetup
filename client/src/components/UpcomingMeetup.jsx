@@ -42,7 +42,7 @@ const UpcomingMeetup = ({ meetupDetails }) => {
             <strong>Värd:</strong> {meetupDetails.host}
           </p>
           <p>
-            <strong>Participants: </strong>
+            <strong>Deltagare: </strong>
             {meetupDetails.numberOfParticipants}
           </p>
         </div>
