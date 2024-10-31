@@ -11,6 +11,49 @@ const UpcomingMeetup = ({ meetupDetails }) => {
     setIsOpen(newIsOpen);
   };
 
+  const handleBooking = async () => {
+    const token = sessionStorage.getItem("userToken");
+    try {
+      const res = await fetch(
+        "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ meetupId: meetupDetails.meetupId }),
+        }
+      );
+      const data = await res.json();
+      console.log("fetched data", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const cancelBooking = async () => {
+    const token = sessionStorage.getItem("userToken");
+    try {
+      const res = await fetch(
+        //Byt ut Länken Nedanför ----->
+        "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ meetupId: meetupDetails.meetupId }),
+        }
+      );
+      const data = await res.json();
+      console.log("fetched data", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="upcommingMeetupContainer">
       <div className="headerContent">
@@ -43,8 +86,18 @@ const UpcomingMeetup = ({ meetupDetails }) => {
           </p>
           <p>
             <strong>Deltagare: </strong>
-            {meetupDetails.numberOfParticipants}
+            {meetupDetails.participants.length}
           </p>
+          <p>
+            <strong>Platser: </strong>
+            {meetupDetails.seats}
+          </p>
+          <button onClick={handleBooking}>
+            {meetupDetails.participants.length === meetupDetails.seats
+              ? "Fully booked"
+              : "Book"}
+          </button>
+          <button onClick={cancelBooking}>Cancel</button>
         </div>
       )}
     </div>
@@ -59,10 +112,9 @@ UpcomingMeetup.propTypes = {
     time: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
     host: PropTypes.string.isRequired,
-    numberOfParticipants: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
+    meetupId: PropTypes.string,
+    participants: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    seats: PropTypes.number,
   }).isRequired,
 };
 
