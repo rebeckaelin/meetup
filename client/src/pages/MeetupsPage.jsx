@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import UpcommingMeetup from "../components/UpcomingMeetup";
 import "../sass/MeetUpsPage.scss";
+import userLogo from "../assets/userLogo.png";
 
 const MeetupsPage = () => {
   const token = sessionStorage.getItem("userToken");
@@ -122,7 +123,7 @@ const MeetupsPage = () => {
   };
   return (
     <div className="meetupsPageWrapper">
-      <Header />
+      <Header userLogoSrc={userLogo} />
       <div className="searchContainer">
         <form
           onSubmit={(e) => {
