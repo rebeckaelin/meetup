@@ -1,8 +1,7 @@
 import "../sass/Header.scss";
 
-import userLogo from "../assets/userLogo.png";
 import { useNavigate } from "react-router-dom";
-const Header = () => {
+const Header = ({ userLogoSrc, hideImage }) => {
   const navigate = useNavigate();
   return (
     <div className="headerMainContainer">
@@ -11,7 +10,12 @@ const Header = () => {
         <h1 onClick={() => navigate("/")}>MeetHub</h1>
       </div>
       <div className="right-container">
-        <img onClick={() => navigate("/profile")} src={userLogo} alt="" />
+        <img
+          className={hideImage ? "hidden" : ""}
+          onClick={() => navigate("/profile")}
+          src={userLogoSrc}
+          alt="User Logo"
+        />
       </div>
     </div>
   );

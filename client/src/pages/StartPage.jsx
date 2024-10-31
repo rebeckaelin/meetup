@@ -1,6 +1,7 @@
 import "../sass/StartPage.scss";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import userLogo from "../assets/userLogo.png";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -58,7 +59,7 @@ const StartPage = () => {
       if (data.success) {
         setLoginEmail("");
         setLoginPsw("");
-        // navigate("/meetups");
+        navigate("/meetups");
       }
     } catch (error) {
       console.error(error);
@@ -67,7 +68,7 @@ const StartPage = () => {
 
   return (
     <div className="startPageMainContainer">
-      <Header />
+      <Header userLogoSrc={userLogo} hideImage={true} />
       <div className="loginBox">
         <h2 className="loginTitle">Login</h2>
         <form className="loginForm" onSubmit={handleSignIn}>
