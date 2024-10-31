@@ -78,7 +78,7 @@ const StartPage = () => {
     <div className="startPageMainContainer">
       <Header userLogoSrc={userLogo} hideImage={true} />
       <div className="loginBox">
-        <h2 className="loginTitle">Login</h2>
+        <h2 className="loginTitle">LOGIN</h2>
         <form className="loginForm" onSubmit={handleSignIn}>
           <label htmlFor="loginEmail">Email</label>
           <input
