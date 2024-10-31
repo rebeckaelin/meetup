@@ -43,7 +43,7 @@ const registerToMeetup = async (event) => {
       return sendError(400, error.message);
     }
     console.error("Error registering meetup", error);
-    return sendError(500, "Error registering to meetup");
+    return sendError(500, "Error registering to meetup.");
   }
 };
 
