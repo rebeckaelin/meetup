@@ -35,7 +35,7 @@ export const handler = async (event) => {
 
     const token = generateToken({ userId: user.userId, email: user.email });
 
-    return sendResponse(200, token);
+    return sendResponse(200, {userId: user.userId, token: token});
   } catch (error) {
     console.log("error:", error);
     return sendError(500, "Server error");

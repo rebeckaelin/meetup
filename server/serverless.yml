@@ -55,7 +55,7 @@ functions:
     handler: services/api/registerToMeetup.handler
     events:
       - httpApi:
-          path: /meetups
+          path: /meetups/registration
           method: post
 
   filterMeetups:
@@ -69,8 +69,8 @@ functions:
     handler: services/api/removeRegistration.handler
     events:
       - httpApi:
-          path: /meetups
-          method: delete
+          path: /meetups/registration
+          method: put
 
   postReview:
     handler: services/api/postReview.handler
@@ -111,13 +111,13 @@ resources:
         AttributeDefinitions:
           - AttributeName: meetupId
             AttributeType: S
-          # - AttributeName:
-          #   AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
         KeySchema:
           - AttributeName: meetupId
             KeyType: HASH
-          # - AttributeName:
-          #   KeyType: "RANGE"
+          - AttributeName: userId
+            KeyType: "RANGE"
         BillingMode: PAY_PER_REQUEST
 
     meetupTable:
