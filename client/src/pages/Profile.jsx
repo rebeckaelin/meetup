@@ -4,6 +4,7 @@ import UpcomingMeetup from "../components/UpcomingMeetup";
 import OldMeetup from "../components/OldMeetup";
 import "../sass/Profile.scss";
 import { useEffect, useState } from "react";
+import userLogo from "../assets/userLogo.png";
 
 const Profile = () => {
   const [upcomingMeetups, setUpcomingMeetups] = useState([]);
@@ -65,7 +66,7 @@ const Profile = () => {
 
   return (
     <div className="profileMainContainer">
-      <Header />
+      <Header userLogoSrc={userLogo} />
       <div className="meetupBox">
         <h2 className="headline">Upcoming meetups</h2>
         {upcomingMeetups.map((meetup) => (
