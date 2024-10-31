@@ -21,6 +21,18 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource: arn:aws:dynamodb:${aws:region}:*:table/*
+  httpApi:
+    cors:
+      allowedOrigins:
+        - "*"
+      allowedHeaders:
+        - "*"
+      allowedMethods:
+        - OPTIONS
+        - GET
+        - POST
+        - PUT
+      allowCredentials: false
 
 functions:
   signup:
