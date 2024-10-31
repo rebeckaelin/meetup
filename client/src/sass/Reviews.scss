@@ -1,16 +1,10 @@
 @use "./index" as *;
 
 .reviewForms {
-  //   @include setDisplayFlex($column);
+  @include setDisplayFlex($row);
   @include secondaryFont($black, $fontFamily);
-  display: flex;
-  //   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  //   flex-wrap: wrap;
-  //   height: 90px;
-  width: 300px;
-  //   border: 1px solid red;
   margin-top: 10px;
 }
 
@@ -31,19 +25,17 @@
 .ratingInput {
   @include textFont($black, $fontFamily);
   padding-left: 0.5rem;
-  //   margin: 0;
   height: 20px;
   width: 55px;
   background-color: $white;
   border: none;
-  opacity: 1;
 }
 
 .ratingInput::-webkit-outer-spin-button,
 .ratingInput::-webkit-inner-spin-button {
   -webkit-appearance: auto;
   appearance: auto;
-  opacity: 1; /* Gör pilarna fullt synliga */
+  opacity: 1;
 }
 .buttonContainer {
   display: flex;
