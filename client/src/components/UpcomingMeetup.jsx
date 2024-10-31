@@ -4,8 +4,10 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 const UpcomingMeetup = ({ meetupDetails }) => {
+  const token = sessionStorage.getItem("userToken");
+  const userId = sessionStorage.getItem("user");
   const [isOpen, setIsOpen] = useState(false);
-
+  const isBoked = meetupDetails.participants.includes(userId);
   const reloadPage = () => {
     window.location.reload();
   };
@@ -14,9 +16,7 @@ const UpcomingMeetup = ({ meetupDetails }) => {
     const newIsOpen = !isOpen;
     setIsOpen(newIsOpen);
   };
-
-  const handleBooking = async () => {
-    const token = sessionStorage.getItem("userToken");
+  const bookMeetup = async () => {
     try {
       const res = await fetch(
         "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups/registration",
@@ -30,18 +30,20 @@ const UpcomingMeetup = ({ meetupDetails }) => {
         }
       );
       const data = await res.json();
+      if (!data.success) {
+        alert("could not book meetup");
+        return;
+      }
+      alert(`${meetupDetails.name} is booked`);
       reloadPage();
       console.log("fetched data", data);
     } catch (error) {
       console.log(error);
     }
   };
-
   const cancelBooking = async () => {
-    const token = sessionStorage.getItem("userToken");
     try {
       const res = await fetch(
-        //Byt ut Länken Nedanför ----->
         "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups/registration",
         {
           method: "PUT",
@@ -53,10 +55,23 @@ const UpcomingMeetup = ({ meetupDetails }) => {
         }
       );
       const data = await res.json();
+      if (!data.success) {
+        alert("could not cancel");
+        return;
+      }
+      alert(`${meetupDetails.name} is canceled`);
       reloadPage();
       console.log("fetched data", data);
     } catch (error) {
       console.log(error);
+    }
+  };
+  //hanterar om man är bokad eller inte och vilken funktion den ska peka på
+  const handleBooking = async () => {
+    if (!isBoked) {
+      await bookMeetup();
+    } else {
+      await cancelBooking();
     }
   };
 
@@ -98,12 +113,13 @@ const UpcomingMeetup = ({ meetupDetails }) => {
             <strong>Seats: </strong>
             {meetupDetails.seats}
           </p>
-          <button onClick={handleBooking}>
-            {meetupDetails.participants.length === meetupDetails.seats
+          <button className="bookingBtn" onClick={handleBooking}>
+            {isBoked
+              ? "avboka"
+              : meetupDetails.participants.length === meetupDetails.seats
               ? "Fully booked"
               : "Book"}
           </button>
-          <button onClick={cancelBooking}>Cancel</button>
         </div>
       )}
     </div>
