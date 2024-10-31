@@ -17,9 +17,9 @@ const Header = ({ userLogoSrc, hideContent }) => {
         <h1 onClick={() => navigate("/meetups")}>MeetHub</h1>
       </div>
       <div className={`right-container ${hideContent ? "hidden" : ""}`}>
-        <button className="logoutButton" onClick={handleLogout}>
+        <p className="logoutButton" onClick={handleLogout}>
           LOGOUT
-        </button>
+        </p>
         <img
           className="profileImg"
           onClick={() => navigate("/profile")}
