@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 const OldMeetup = ({ eventDetails }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [toggleReview, setToggleReview] = useState(false);
 
   const {
     desc = "ingen beskrivning tillgänglig",
@@ -42,15 +43,28 @@ const OldMeetup = ({ eventDetails }) => {
           <p>
             <strong>Värd:</strong> {host}
           </p>
-          <p>
-            <strong>Snittbetyg:</strong> {averageRating}
-          </p>
-          <h4>Recensioner:</h4>
-          <ul>
-            {reviews.map((review, reviewIndex) => (
-              <li key={reviewIndex}>{review}</li>
-            ))}
-          </ul>
+          <img
+            src={expandarrow}
+            alt="Expand More"
+            className={`expandMoreIcon ${toggleReview ? "rotated" : ""}`}
+            onClick={() => setToggleReview(!toggleReview)}
+            style={{
+              transform: toggleReview ? "rotate(0deg)" : "rotate(90deg)",
+            }}
+          />
+          {toggleReview && (
+            <div>
+              <p>
+                <strong>Snittbetyg:</strong> {averageRating}
+              </p>
+              <h4>Recensioner:</h4>
+              <ul>
+                {reviews.map((review, reviewIndex) => (
+                  <li key={reviewIndex}>{review}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>

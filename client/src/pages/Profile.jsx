@@ -18,7 +18,7 @@ const Profile = () => {
       const token = sessionStorage.getItem("userToken");
       try {
         const response = await fetch(
-          "https://or5ue0zwa6.execute-api.eu-north-1.amazonaws.com/meetups",
+          "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/filtered",
           {
             method: "GET",
             headers: {
@@ -32,7 +32,7 @@ const Profile = () => {
         }
         const data = await response.json();
         console.log("Fetched data:", data);
-
+        console.log(data.data);
         const meetups = Array.isArray(data.data) ? data.data : [];
 
         const today = new Date();
