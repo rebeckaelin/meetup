@@ -9,27 +9,14 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
   const token = sessionStorage.getItem("userToken");
   const userId = sessionStorage.getItem("user");
   const [reviewList, setReviewList] = useState([]);
-  const [hasLeftReview, setHasLeftReview] = useState(false);
-  const checkIfReviewIsLeft = (userId) => {
-    if (reviewList.length > 0) {
-      const isReviewed = reviewList.some((value) => value.userId === userId);
-      setHasLeftReview(isReviewed);
-    }
-    setHasLeftReview(false);
-  };
+  const [hasLeftReview, setHasLeftReview] = useState("");
 
   const {
     desc = "ingen beskrivning tillgänglig",
     name = "Ingen titel",
     location = "Ingen plats",
     host = "Ingen värd",
-    // averageRating = 0,
-    // reviews = [],
   } = eventDetails || {};
-  const handleImageClick = () => {
-    const newIsOpen = !isOpen;
-    setIsOpen(newIsOpen);
-  };
 
   const getData = async () => {
     try {
@@ -44,17 +31,22 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
         }
       );
       const data = await res.json();
-      // if (!data.success) {
-      //   alert("could not get reviews");
-      //   return;
-      // }
+      if (!data.success) {
+        alert("could not get reviews");
+        return;
+      }
 
-      console.log("data.data", data.data);
       setReviewList(data.data);
-      checkIfReviewIsLeft(userId);
-      console.log("hasleftreview", hasLeftReview);
     } catch (error) {
       console.log(error);
+    } finally {
+      if (reviewList.length > 0) {
+        const isReviewed = reviewList.some((value) => value.userId === userId);
+
+        setHasLeftReview(isReviewed);
+      } else {
+        setHasLeftReview(false);
+      }
     }
   };
   useEffect(() => {
@@ -69,7 +61,7 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
           src={expandarrow}
           alt="Expand More"
           className={`expandMoreIcon ${isOpen ? "rotated" : ""}`}
-          onClick={handleImageClick}
+          onClick={() => setIsOpen(!isOpen)}
           style={{
             transform: isOpen ? "rotate(0deg)" : "rotate(90deg)",
           }}
@@ -102,7 +94,7 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
               )}
             </div>
             <h4>Reviews:</h4>
-            <ul>
+            <ul className="reviewItem">
               {reviewList.length > 0 ? (
                 reviewList.map((review, reviewIndex) => (
                   <li key={reviewIndex}>{review.comment}</li>
@@ -124,7 +116,9 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
               className={`expandMoreIcon ${toggleReview ? "rotated" : ""} ${
                 hideContent ? "hidden" : ""
               }`}
-              onClick={() => setToggleReview(!toggleReview)}
+              onClick={() => {
+                setToggleReview(!toggleReview), getData();
+              }}
               style={{
                 transform: toggleReview ? "rotate(0deg)" : "rotate(90deg)",
               }}

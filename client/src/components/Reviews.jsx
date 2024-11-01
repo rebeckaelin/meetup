@@ -8,11 +8,9 @@ const Reviews = ({ meetupId, hasLeftReview }) => {
 
   const handleReview = async (event) => {
     const token = sessionStorage.getItem("userToken");
-    console.log("hasleftreview", hasLeftReview);
+
     event.preventDefault();
-    console.log("rating", rating);
-    console.log("review", review);
-    //post req
+
     try {
       const res = await fetch(
         "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/reviews",
@@ -30,7 +28,7 @@ const Reviews = ({ meetupId, hasLeftReview }) => {
         }
       );
       const data = await res.json();
-      console.log("data", data);
+
       if (!data.success) {
         alert("could not add rating");
         return;
@@ -67,10 +65,13 @@ const Reviews = ({ meetupId, hasLeftReview }) => {
           <button
             disabled={hasLeftReview ? true : false}
             className="reviewButton"
-            style={{ opacity: hasLeftReview ? 0.5 : "" }}
+            style={{
+              opacity: hasLeftReview ? 0.5 : "",
+              cursor: hasLeftReview ? "not-allowed" : "pointer",
+            }}
             type="submit"
           >
-            {handleReview ? "Already reviewed" : "Add review"}
+            {hasLeftReview ? "Reviewed" : "Add review"}
           </button>
         </div>
       </form>
