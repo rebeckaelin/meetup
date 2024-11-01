@@ -16,7 +16,6 @@ const MeetupsPage = () => {
   const [meetUpList, setMeetupList] = useState([]);
   const [oldMeetups, setOldMeetups] = useState([]);
 
-  const baseURL = "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/";
   const searchInputRef = useRef(null);
   const dateInputRef = useRef(null);
   const categoryRef = useRef(null);
@@ -52,13 +51,16 @@ const MeetupsPage = () => {
 
   const getData = async () => {
     try {
-      const res = await fetch(`${baseURL}/meetups`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/meetups`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await res.json();
       if (!data.success) {
         alert("could not get meetups");
@@ -66,21 +68,19 @@ const MeetupsPage = () => {
       }
 
       const today = new Date();
-      const upcoming = data.data.filter((meetup) => {
-        const meetupDate = new Date(meetup.date);
+      const upcoming = data.data.filter(
+        (meetup) => new Date(meetup.date) >= today
+      );
 
-        return meetupDate >= today;
-      });
+      const old = data.data.filter((meetup) => new Date(meetup.date) < today);
 
-      const old = data.data.filter((meetup) => {
-        const meetupDate = new Date(meetup.date);
-
-        return meetupDate < today;
-      });
-
-      setFetchedData(upcoming);
-      setOldMeetups(old);
-      setMeetupList(upcoming);
+      const sortedUpcoming = upcoming.sort(
+        (a, b) => new Date(a.date) - new Date(b.date)
+      );
+      const sortedOld = old.sort((a, b) => new Date(a.date) - new Date(b.date));
+      setFetchedData(sortedUpcoming);
+      setOldMeetups(sortedOld);
+      setMeetupList(sortedUpcoming);
     } catch (err) {
       console.error(err);
     }
@@ -226,9 +226,7 @@ const MeetupsPage = () => {
           />
         ))}
       </div>
-      <footer className="meetupsFooter">
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 };

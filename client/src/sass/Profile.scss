@@ -2,7 +2,6 @@
 
 .profileMainContainer {
   background-color: $white;
-  min-height: 600px;
   align-items: center;
   font-family: $fontFamily;
   @include setDisplayFlex($column);
