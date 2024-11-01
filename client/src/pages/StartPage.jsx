@@ -32,14 +32,14 @@ const StartPage = () => {
 
     try {
       const newUser = { email: email, password: password };
-      console.log("newUser", newUser);
+
       const request = await fetch(`${baseURL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),
       });
       const data = await request.json();
-      console.log("data", data);
+
       if (data.success) {
         setIsVisible(!isVisible);
         setEmail("");
@@ -62,7 +62,7 @@ const StartPage = () => {
         body: JSON.stringify(user),
       });
       const data = await request.json();
-      console.log("data", data);
+
       sessionStorage.setItem("userToken", data.data.token);
       sessionStorage.setItem("user", data.data.userId);
       if (data.success) {

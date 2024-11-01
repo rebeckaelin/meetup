@@ -38,7 +38,6 @@ const UpcomingMeetup = ({ meetupDetails }) => {
       }
       alert(`${meetupDetails.name} is booked`);
       reloadPage();
-      console.log("fetched data", data);
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +62,6 @@ const UpcomingMeetup = ({ meetupDetails }) => {
       }
       alert(`${meetupDetails.name} is canceled`);
       reloadPage();
-      console.log("fetched data", data);
     } catch (error) {
       console.log(error);
     }
