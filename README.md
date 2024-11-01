@@ -1,44 +1,41 @@
-# MeetUp on MeetHub
+# 🥩 MeetUp on MeetHub
 
-## Description 🥩
+## 📜 Description
 
 En app där du enkelt kan se vilka aktiviteter som finns över hela Sverige, du bokar enkelt en plats via appen efter du skapat ett konto och loggat in.
 
-## Build with
+## 🛠️ Build with
 
 [![React][React.js]][React-url]
 [![AWS][AWS-logo]][AWS-url]
 [![Serverless][Serverless-logo]][Serverless-url]
 [![DynamoDB][DynamoDB-logo]][DynamoDB-url]
 
-## Flow of thought
+## 💡 Flow of thought
 
-Vi började med att bryta ner user stories till tickets som kan ses på vår trello och bestämde att vi skulle ha daily standups varje dag kl 09:00 (svensk tid 🌍)
-De som hade huvudansvar för frontenden gjorde en Figmaskiss för att ha en grund men som allt efter tiden gick utvecklats i samröre med övriga medlemmar.
+Vårt arbete började med att omvandla våra user stories till tickets på Trello, och vi satte dagliga standups kl. 09:00 (svensk tid 🌍) för att hålla alla uppdaterade. Frontend-teamet inledde med en Figmaskiss för att ge designen riktning, men vi utvecklade sedan designen i samarbete med hela teamet.
 
-Vi har försökt att validera så mycket som möjligt i både frontend och backend för att säkerställa funktionalitet. Så att allting flyter som vi tänkt. Vi använder token för att komma åt samtliga sidor så inloggning krävs. Detta lagras i sessionstorage som rensas när man loggat ut.
+Validering har varit ett nyckelord för oss – både frontend och backend är fyllda med kontroller för att säkerställa en smidig användarupplevelse. Appen kräver inloggning för att få åtkomst till innehållet, och vi använder token-baserad inloggning som sparas i sessionStorage och rensas vid utloggning. Säkerhet, användarvänlighet och funktionalitet har varit i fokus genom hela projektet.
 
-Vi har jobbat stenhårt med pull requests till en dev branch där vi haft minst två reviews på koden man vill bidra med. 🌵
+Alla bidrag går genom pull requests till vår dev-branch och kräver minst två godkännanden för att säkra kvaliteten och hålla oss synkade. 👥
 
-### Utilities
+### 📐 Utilities
 
 - [Figma](https://www.figma.com/design/BUZQycJOrb8PuuaJlYBtgQ/meetup%2C-syntax-sorcery?node-id=0-1&node-type=canvas&t=2h4YESOWLyK7q32A-0)
 - [Trello](https://trello.com/b/F2HUbbwv/syntax-sorcery)
 
-![screenshot](screenshot.png)
-
-### Links
+### 🌐 Links
 
 dev: http://ss-meetup-dev.s3-website.eu-north-1.amazonaws.com/ </br>
 prod: http://ss-meetup-prod.s3-website.eu-north-1.amazonaws.com/
 
-## Authors
+## Creators of this masterpiece ✨
 
-- Linn Johansson
-- Rebecka Larsson
-- Jens Brandels
-- Johan Skoog
-- Kristofer Almeros
+💡 Linn Johansson – Idéspruta och kodknackare
+🛡️ Rebecka Larsson – Backend-kodens beskyddare
+🎨 Jens Brandels – Pixelperfektionist och designmagiker
+🌍 Johan Skoog – Vår globetrottande fullstack-sheriff
+🔧 Kristofer Almeros – Backend-fixar’n med koll på allt
 
 <!-- Logon och länkar för AWS och Serverless -->
 
