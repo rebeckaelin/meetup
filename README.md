@@ -13,7 +13,7 @@ En app där du enkelt kan se vilka aktiviteter som finns över hela Sverige, du 
 
 ## 💡 Flow of thought
 
-Vårt arbete började med att omvandla våra user stories till tickets på Trello, och vi satte dagliga standups kl. 09:00 (svensk tid 🌍) för att hålla alla uppdaterade. Frontend-teamet inledde med en Figmaskiss för att ge designen riktning, men vi utvecklade sedan designen i samarbete med hela teamet.
+Vårt arbete började med att omvandla våra user stories till tickets på Trello, och vi satte dagliga standups kl. 09:00 (svensk tid 🌍) för att hålla alla uppdaterade. Frontend-teamet inledde med en Figmaskiss för att ge designen riktning, men vi utvecklade sedan både designen för frontend och backend i samarbete med hela teamet. Det har förekommit både eget kodande och parkodning.
 
 Validering har varit ett nyckelord för oss – både frontend och backend är fyllda med kontroller för att säkerställa en smidig användarupplevelse. Appen kräver inloggning för att få åtkomst till innehållet, och vi använder token-baserad inloggning som sparas i sessionStorage och rensas vid utloggning. Säkerhet, användarvänlighet och funktionalitet har varit i fokus genom hela projektet.
 
