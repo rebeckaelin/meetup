@@ -1,0 +1,22 @@
+@use "./index" as *;
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
+.footerMainContainer {
+  background-color: $dimBlue;
+  display: grid;
+  font-family: ubuntu;
+  width: 375px;
+
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+
+  .footer-box {
+    margin: 10px;
+    h3 {
+      font-size: 13px;
+    }
+    p {
+      font-size: 10px;
+    }
+  }
+}

@@ -7,6 +7,8 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: eu-north-1
+  environment:
+    JWT_SECRET_KEY: topSecret_Key
   iam:
     role:
       statements:
@@ -16,8 +18,21 @@ provider:
             - dynamodb:Scan
             - dynamodb:GetItem
             - dynamodb:PutItem
+            - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource: arn:aws:dynamodb:${aws:region}:*:table/*
+  httpApi:
+    cors:
+      allowedOrigins:
+        - "*"
+      allowedHeaders:
+        - "*"
+      allowedMethods:
+        - OPTIONS
+        - GET
+        - POST
+        - PUT
+      allowCredentials: false
 
 functions:
   signup:
@@ -41,33 +56,33 @@ functions:
           path: /meetups
           method: get
 
-  getOneMeetup:
-    handler: services/api/getOneMeetup.handler
+  addNewMeetup:
+    handler: services/api/addNewMeetup.handler
     events:
       - httpApi:
-          path: /meetups/{meetupId}
-          method: get
+          path: /meetups/add
+          method: post
 
   registerToMeetup:
     handler: services/api/registerToMeetup.handler
     events:
       - httpApi:
-          path: /meetups
+          path: /meetups/registration
           method: post
 
-  updateRegistration:
-    handler: services/api/updateRegistration.handler
+  filterMeetups:
+    handler: services/api/filterMeetups.handler
     events:
       - httpApi:
-          path: /meetups
-          method: put
+          path: /meetups/filtered
+          method: get
 
   removeRegistration:
     handler: services/api/removeRegistration.handler
     events:
       - httpApi:
-          path: /meetups
-          method: delete
+          path: /meetups/registration
+          method: put
 
   postReview:
     handler: services/api/postReview.handler
@@ -80,7 +95,7 @@ functions:
     handler: services/api/getReviews.handler
     events:
       - httpApi:
-          path: /reviews
+          path: /reviews/{meetupId}
           method: get
 
 resources:
@@ -90,12 +105,12 @@ resources:
       Properties:
         TableName: meetupUsersTable
         AttributeDefinitions:
-          - AttributeName: mail
+          - AttributeName: email
             AttributeType: S
           # - AttributeName:
           #   AttributeType: S
         KeySchema:
-          - AttributeName: mail
+          - AttributeName: email
             KeyType: HASH
           # - AttributeName:
           #   KeyType: "RANGE"
@@ -108,13 +123,13 @@ resources:
         AttributeDefinitions:
           - AttributeName: meetupId
             AttributeType: S
-          # - AttributeName:
-          #   AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
         KeySchema:
           - AttributeName: meetupId
             KeyType: HASH
-          # - AttributeName:
-          #   KeyType: "RANGE"
+          - AttributeName: userId
+            KeyType: "RANGE"
         BillingMode: PAY_PER_REQUEST
 
     meetupTable:

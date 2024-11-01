@@ -1,0 +1,60 @@
+@use "./index" as *;
+
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
+.headerMainContainer {
+  background-color: rgb(6, 104, 157);
+  display: flex;
+  width: 375px;
+  height: 95px;
+  align-items: center;
+  justify-content: space-between;
+
+  .left-container {
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: 0.2fr 1fr;
+    align-items: center;
+    .ball {
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      background-color: rgb(157, 218, 251);
+    }
+
+    h1 {
+      font-family: ubuntu;
+      font-weight: 400;
+      font-size: 37px;
+      cursor: pointer;
+    }
+  }
+
+  .right-container {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 0.5rem;
+    align-items: center;
+
+    .profileImg {
+      cursor: pointer;
+    }
+
+    .logoutButton {
+      padding: 0rem 0.5rem 0rem 0.5rem;
+      font-size: 0.7rem;
+      text-decoration: underline;
+      font-family: ubuntu;
+      cursor: pointer;
+    }
+
+    .logoutButton:hover {
+      color: $alert;
+      font-family: ubuntu;
+    }
+  }
+
+  .hidden {
+    visibility: hidden;
+  }
+}

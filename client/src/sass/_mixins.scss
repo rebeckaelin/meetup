@@ -1,0 +1,45 @@
+@mixin setDisplayFlex($direction) {
+  display: flex;
+  flex-direction: $direction;
+  margin: 0 auto;
+  padding: 0;
+}
+
+@mixin setButtonStyle($fontColor, $backgroundColor) {
+  border-radius: 4px;
+  // box-shadow: $boxShadow;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  font-size: 1rem;
+  border: none;
+  font-weight: bold;
+  color: $fontColor;
+  background-color: $backgroundColor;
+  cursor: pointer;
+}
+
+@mixin heroFont($fontColor, $fontFamily) {
+  font-family: $fontFamily;
+  font-size: 2rem;
+  font-weight: 700;
+  color: $fontColor;
+  margin: 0;
+}
+@mixin secondaryFont($fontColor, $fontFamily) {
+  font-family: $fontFamily;
+  font-size: 1.2rem;
+  color: $fontColor;
+}
+
+@mixin titelFont($fontColor, $fontFamily) {
+  font-family: $fontFamily;
+  font-size: 1rem;
+  font-weight: 700;
+  color: $fontColor;
+}
+
+@mixin textFont($fontColor, $fontFamily, $useSmallSize: false) {
+  font-family: $fontFamily;
+  font-size: if($useSmallSize, 0.75rem, 0.88rem);
+  font-weight: 500;
+  color: $fontColor;
+}

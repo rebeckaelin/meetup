@@ -1,0 +1,58 @@
+@use "./index" as *;
+
+.profileMainContainer {
+  background-color: $white;
+  min-height: 600px;
+  align-items: center;
+  font-family: $fontFamily;
+  @include setDisplayFlex($column);
+  min-height: 100vh;
+}
+.meetupBox {
+  color: $black;
+  flex: 1;
+}
+
+.headline {
+  margin-top: 20px;
+  margin-bottom: 5px;
+  margin-left: 20px;
+  text-underline-offset: 5px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  display: inline-block;
+  text-decoration: underline;
+  text-decoration-thickness: 0.1px;
+  text-align: center;
+  @include secondaryFont($black, $fontFamily);
+}
+
+.noMeetupsMessage {
+  @include secondaryFont($black, $fontFamily);
+  margin-top: 100px;
+  &.smallMargin {
+    margin-top: 20px;
+  }
+  padding: 20px;
+  background: $skyBlue;
+  width: 320px;
+  border-radius: 8px;
+}
+
+.noOldMeetupsMessage {
+  @include secondaryFont($black, $fontFamily);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: $skyBlue;
+  width: 320px;
+  border-radius: 8px;
+}
+
+.link {
+  @include setDisplayFlex($column);
+  color: $black;
+  text-decoration: none;
+  line-height: 90px;
+}

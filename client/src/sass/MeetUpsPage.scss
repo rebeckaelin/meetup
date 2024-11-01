@@ -1,0 +1,79 @@
+@use "./index" as *;
+
+.meetupsPageWrapper {
+  @include setDisplayFlex($column);
+  background-color: $white;
+  gap: 1rem;
+  min-height: 100vh;
+  min-width: 350px;
+}
+.meetupsFooter {
+}
+.searchContainer {
+  @include setDisplayFlex($column);
+  justify-content: space-between;
+  gap: 1rem;
+
+  & form {
+    @include setDisplayFlex($row);
+    gap: 1rem;
+  }
+  & input {
+    @include secondaryFont($black, $fontFamily);
+    padding-left: 0.8rem;
+    background-color: $shaddow;
+    border-radius: $rounded;
+    border: none;
+    height: 2.8rem;
+    font-family: $fontFamily;
+  }
+  & ::placeholder {
+    color: $black;
+  }
+  & .searchBtn {
+    padding: 0.7rem;
+    @include setButtonStyle($white, $dimBlue);
+  }
+  & label,
+  select,
+  option {
+    @include textFont($black, $fontFamily);
+    margin: 0;
+  }
+  & select {
+    background-color: $shaddow;
+    border-radius: $rounded;
+    border: none;
+    padding: 0.3rem;
+  }
+}
+.categoryContainer {
+  @include setDisplayFlex($row);
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 350px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+.meetupsWrapper {
+  @include setDisplayFlex($column);
+  min-height: 350px;
+}
+.clearContainer {
+  @include setDisplayFlex($row);
+  align-items: center;
+  margin: 0;
+
+  justify-content: space-between;
+}
+.clearBtn {
+  @include setButtonStyle($black, $white);
+  padding: 0.3rem;
+  margin: 0;
+}
+.dateInput {
+  margin: 0;
+}
+.hidden {
+  visibility: hidden;
+}
