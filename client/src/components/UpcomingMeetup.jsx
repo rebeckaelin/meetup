@@ -8,6 +8,8 @@ const UpcomingMeetup = ({ meetupDetails }) => {
   const userId = sessionStorage.getItem("user");
   const [isOpen, setIsOpen] = useState(false);
   const isBoked = meetupDetails.participants.includes(userId);
+  const isFullyBooked =
+    meetupDetails.participants.length === meetupDetails.seats;
   const reloadPage = () => {
     window.location.reload();
   };
@@ -115,12 +117,12 @@ const UpcomingMeetup = ({ meetupDetails }) => {
             <strong>Seats: </strong>
             {meetupDetails.seats}
           </p>
-          <button className="bookingBtn" onClick={handleBooking}>
-            {isBoked
-              ? "avboka"
-              : meetupDetails.participants.length === meetupDetails.seats
-              ? "Fully booked"
-              : "Book"}
+          <button
+            disabled={isFullyBooked && !isBoked ? true : false}
+            className="bookingBtn"
+            onClick={handleBooking}
+          >
+            {isBoked ? "cancel" : isFullyBooked ? "Fully booked" : "Book"}
           </button>
         </div>
       )}

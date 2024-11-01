@@ -7,8 +7,7 @@
   min-height: 100vh;
   min-width: 350px;
 }
-.meetupsFooter {
-}
+
 .searchContainer {
   @include setDisplayFlex($column);
   justify-content: space-between;
@@ -57,7 +56,7 @@
 }
 .meetupsWrapper {
   @include setDisplayFlex($column);
-  min-height: 350px;
+  min-height: 550px;
 }
 .clearContainer {
   @include setDisplayFlex($row);

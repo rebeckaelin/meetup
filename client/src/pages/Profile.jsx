@@ -39,8 +39,14 @@ const Profile = () => {
         );
         const old = meetups.filter((meetup) => new Date(meetup.date) < today);
 
-        setUpcomingMeetups(upcoming);
-        setOldMeetups(old);
+        const sortedUpcoming = upcoming.sort(
+          (a, b) => new Date(a.date) - new Date(b.date)
+        );
+        const sortedOld = old.sort(
+          (a, b) => new Date(a.date) - new Date(b.date)
+        );
+        setUpcomingMeetups(sortedUpcoming);
+        setOldMeetups(sortedOld);
       } catch (error) {
         setError(error.message);
       } finally {
