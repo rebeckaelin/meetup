@@ -6,6 +6,7 @@
   align-items: center;
   font-family: $fontFamily;
   @include setDisplayFlex($column);
+  min-height: 100vh;
 }
 .meetupBox {
   color: $black;
