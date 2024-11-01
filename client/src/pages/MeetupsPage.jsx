@@ -68,6 +68,7 @@ const MeetupsPage = () => {
       }
 
       const today = new Date();
+      today.setHours(0);
       const upcoming = data.data.filter(
         (meetup) => new Date(meetup.date) >= today
       );
