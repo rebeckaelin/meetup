@@ -95,7 +95,7 @@ functions:
     handler: services/api/getReviews.handler
     events:
       - httpApi:
-          path: /reviews
+          path: /reviews/{meetupId}
           method: get
 
 resources:

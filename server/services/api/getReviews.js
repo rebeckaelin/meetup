@@ -7,18 +7,9 @@ import middy from "@middy/core";
  const getReviews = async (event) => {
 
     try {
-        if (!event.body) return sendError(400, "Request body is missing")
+        const { meetupId } = event.pathParameters
 
-        let parsedBody
-        try {
-            parsedBody = JSON.parse(event.body)
-        } catch (error) {
-            return sendError(400, "Invalid JSON format")
-        }
-
-        const { meetupId } = parsedBody
-
-        if (!meetupId) return sendError(400, "MeetupId is missing")
+        if (!meetupId || meetupId.trim() === "") return sendError(400, "MeetupId is missing")
         
         const { Items } = await db.query({
             TableName: "meetupReviewsTable",
