@@ -29,6 +29,10 @@ Alla bidrag går genom pull requests till vår dev-branch och kräver minst två
 dev: http://ss-meetup-dev.s3-website.eu-north-1.amazonaws.com/ </br>
 prod: http://ss-meetup-prod.s3-website.eu-north-1.amazonaws.com/
 
+För att testa applikationen för samtliga krav så kan du använda.</br>
+email: linn@mail.com </br>
+lösenord: 12345
+
 ## Creators of this masterpiece ✨
 
 💡 Linn Johansson – Idéspruta och kodknackare </br>
