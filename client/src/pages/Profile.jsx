@@ -34,6 +34,7 @@ const Profile = () => {
         const meetups = Array.isArray(data.data) ? data.data : [];
 
         const today = new Date();
+        today.setHours(0);
         const upcoming = meetups.filter(
           (meetup) => new Date(meetup.date) >= today
         );
