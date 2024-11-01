@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import UpcommingMeetup from "../components/UpcomingMeetup";
+import OldMeetup from "../components/OldMeetup";
 import "../sass/MeetUpsPage.scss";
 import userLogo from "../assets/userLogo.png";
 
@@ -13,12 +14,15 @@ const MeetupsPage = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [fetchedData, setFetchedData] = useState([]);
   const [meetUpList, setMeetupList] = useState([]);
+  const [oldMeetups, setOldMeetups] = useState([]);
+
   const baseURL = "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/";
   const searchInputRef = useRef(null);
   const dateInputRef = useRef(null);
   const categoryRef = useRef(null);
   const locationRef = useRef(null);
   //  filtrerar efter olika kriterier
+
   const applyFilters = () => {
     let filteredResults = fetchedData;
     if (selectedCategory && selectedCategory !== "all") {
@@ -57,7 +61,20 @@ const MeetupsPage = () => {
       });
       const { data } = await res.json();
       console.log("data", data);
-      setFetchedData(data);
+      const today = new Date();
+      const upcoming = data.filter((meetup) => {
+        const meetupDate = new Date(meetup.date);
+
+        return meetupDate >= today;
+      });
+
+      const old = data.filter((meetup) => {
+        const meetupDate = new Date(meetup.date);
+
+        return meetupDate < today;
+      });
+      setFetchedData(upcoming);
+      setOldMeetups(old);
       setMeetupList(data);
     } catch (err) {
       console.error(err);
@@ -188,6 +205,16 @@ const MeetupsPage = () => {
       <div className="meetupsWrapper">
         {meetUpList.map((meetup, i) => (
           <UpcommingMeetup key={i} meetupDetails={meetup} />
+        ))}
+      </div>
+      <div>
+        <h2 className="headline">Old meetups</h2>
+        {oldMeetups.map((event) => (
+          <OldMeetup
+            hideContent={true}
+            key={event.meetupId}
+            eventDetails={event}
+          />
         ))}
       </div>
       <footer className="meetupsFooter">

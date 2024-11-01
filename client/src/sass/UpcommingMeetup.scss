@@ -24,6 +24,7 @@
   margin: 0;
   transition: transform 0.3s;
   align-self: flex-end;
+  cursor: pointer;
 }
 
 .additionalContent {
@@ -38,4 +39,11 @@
 
 .desc {
   padding-bottom: 10px;
+}
+.bookingBtn {
+  margin-top: 0.5rem;
+  @include setButtonStyle($white, $dimBlue);
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  cursor: pointer;
 }

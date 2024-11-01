@@ -1,12 +1,13 @@
 import "../sass/UpcommingMeetup.scss";
 import expandarrow from "../assets/expand-arrow.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Reviews from "./Reviews";
-const OldMeetup = ({ eventDetails }) => {
+const OldMeetup = ({ eventDetails, hideContent }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [toggleReview, setToggleReview] = useState(false);
-
+  // const token = sessionStorage.getItem("userToken");
+  // const [reviewList, setReviewList] = useState([]);
   const {
     desc = "ingen beskrivning tillgänglig",
     name = "Ingen titel",
@@ -19,6 +20,33 @@ const OldMeetup = ({ eventDetails }) => {
     const newIsOpen = !isOpen;
     setIsOpen(newIsOpen);
   };
+
+  // const getData = async () => {
+  //   try {
+  //     const res = await fetch(
+  //       //byta url till en ny
+  //       "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/reviews",
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     const data = await res.json();
+  //     if (!data.success) {
+  //       alert("could not get reviews");
+  //       return;
+  //     }
+  //     console.log(data.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getData();
+  // });
 
   return (
     <div className="upcommingMeetupContainer">
@@ -43,30 +71,33 @@ const OldMeetup = ({ eventDetails }) => {
           <p>
             <strong>Host:</strong> {host}
           </p>
-          <p>Leave a review</p>
+
+          <div>
+            <p>
+              <strong>Average:</strong> {averageRating}
+            </p>
+            <h4>Reviews:</h4>
+            <ul>
+              {reviews.map((review, reviewIndex) => (
+                <li key={reviewIndex}>{review}</li>
+              ))}
+            </ul>
+          </div>
+          <p className={`${hideContent ? "hidden" : ""}`}>Leave a review</p>
           <img
             src={expandarrow}
             alt="Expand More"
-            className={`expandMoreIcon ${toggleReview ? "rotated" : ""}`}
+            className={`expandMoreIcon ${toggleReview ? "rotated" : ""} ${
+              hideContent ? "hidden" : ""
+            }`}
             onClick={() => setToggleReview(!toggleReview)}
             style={{
               transform: toggleReview ? "rotate(0deg)" : "rotate(90deg)",
             }}
           />
-          {toggleReview && (
-            <div>
-              <p>
-                <strong>Average:</strong> {averageRating}
-              </p>
-              <h4>Reviews:</h4>
-              <ul>
-                {reviews.map((review, reviewIndex) => (
-                  <li key={reviewIndex}>{review}</li>
-                ))}
-              </ul>
-              <Reviews meetupId={eventDetails.meetupId} />
-            </div>
-          )}
+          <div className={` ${hideContent ? "hidden" : ""}`}>
+            {toggleReview && <Reviews meetupId={eventDetails.meetupId} />}
+          </div>
         </div>
       )}
     </div>
