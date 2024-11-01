@@ -14,17 +14,14 @@ const postReview = async (event) => {
     return sendError(400, error.message);
   }
 
-  
-
   try {
-
     const reviewExists = await db.get({
       TableName: "meetupReviewsTable",
-      Key: { meetupId, userId }
-    })
+      Key: { meetupId, userId },
+    });
 
     if (reviewExists.Item) {
-      return sendError(400, "Review already exists")
+      return sendError(409, "Review already exists");
     }
 
     const newReview = {
