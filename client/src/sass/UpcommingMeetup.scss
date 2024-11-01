@@ -14,6 +14,7 @@
   @include setDisplayFlex($row);
   align-items: center;
   justify-content: space-between;
+  @include textFont($black, $fontFamily, true);
 }
 
 .expandMoreIcon {
@@ -46,4 +47,9 @@
   font-size: 0.8rem;
   padding: 0.5rem;
   cursor: pointer;
+}
+
+.openReview {
+  @include setDisplayFlex($row);
+  @include textFont($black, $fontFamily);
 }
