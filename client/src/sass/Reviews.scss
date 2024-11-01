@@ -46,7 +46,7 @@
 .reviewButton {
   @include setButtonStyle($black, $white);
   padding: 3px;
-  @include textFont($black, $fontFamily);
+  @include textFont($black, $fontFamily, true);
   margin-top: 5px;
   padding: 5px;
 }

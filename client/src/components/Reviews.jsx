@@ -2,12 +2,13 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import "../sass/Reviews.scss";
 
-const Reviews = ({ meetupId }) => {
+const Reviews = ({ meetupId, hasLeftReview }) => {
   const [review, setReview] = useState("");
   const [rating, setRating] = useState("");
 
   const handleReview = async (event) => {
     const token = sessionStorage.getItem("userToken");
+    console.log("hasleftreview", hasLeftReview);
     event.preventDefault();
     console.log("rating", rating);
     console.log("review", review);
@@ -34,6 +35,7 @@ const Reviews = ({ meetupId }) => {
         alert("could not add rating");
         return;
       }
+      location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -62,8 +64,13 @@ const Reviews = ({ meetupId }) => {
             required
             placeholder="1-5"
           ></input>
-          <button className="reviewButton" type="submit">
-            Add review
+          <button
+            disabled={hasLeftReview ? true : false}
+            className="reviewButton"
+            style={{ opacity: hasLeftReview ? 0.5 : "" }}
+            type="submit"
+          >
+            {handleReview ? "Already reviewed" : "Add review"}
           </button>
         </div>
       </form>
@@ -73,6 +80,7 @@ const Reviews = ({ meetupId }) => {
 
 Reviews.propTypes = {
   meetupId: PropTypes.string,
+  hasLeftReview: PropTypes.bool,
 };
 
 export default Reviews;

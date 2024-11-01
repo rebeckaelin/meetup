@@ -52,4 +52,5 @@
 .openReview {
   @include setDisplayFlex($row);
   @include textFont($black, $fontFamily);
+  list-style: none;
 }
