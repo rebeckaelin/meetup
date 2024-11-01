@@ -45,6 +45,7 @@ const StartPage = () => {
         setEmail("");
         setPassword("");
         setComparePsw("");
+        alert("Account created successfully!");
       }
     } catch (error) {
       console.error(error);
