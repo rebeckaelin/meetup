@@ -5,6 +5,7 @@ import OldMeetup from "../components/OldMeetup";
 import "../sass/Profile.scss";
 import { useEffect, useState } from "react";
 import userLogo from "../assets/userLogo.png";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [upcomingMeetups, setUpcomingMeetups] = useState([]);
@@ -14,8 +15,6 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchMeetups = async () => {
-      console.log("Updated upcomingMeetups:", upcomingMeetups);
-      console.log("Updated oldMeetups:", oldMeetups);
       const token = sessionStorage.getItem("userToken");
       try {
         const response = await fetch(
@@ -32,22 +31,13 @@ const Profile = () => {
           throw new Error("Failed to fetch meetups data");
         }
         const data = await response.json();
-        console.log("Fetched data:", data);
-        console.log(data.data);
         const meetups = Array.isArray(data.data) ? data.data : [];
 
         const today = new Date();
-        const upcoming = meetups.filter((meetup) => {
-          const meetupDate = new Date(meetup.date);
-
-          return meetupDate >= today;
-        });
-
-        const old = meetups.filter((meetup) => {
-          const meetupDate = new Date(meetup.date);
-
-          return meetupDate < today;
-        });
+        const upcoming = meetups.filter(
+          (meetup) => new Date(meetup.date) >= today
+        );
+        const old = meetups.filter((meetup) => new Date(meetup.date) < today);
 
         setUpcomingMeetups(upcoming);
         setOldMeetups(old);
@@ -64,19 +54,60 @@ const Profile = () => {
   if (loading) return <p>Loading meetups...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const renderNoMeetupsMessage = () => (
+    <div
+      className={`noMeetupsMessage ${
+        upcomingMeetups.length === 0 && oldMeetups.length > 0
+          ? "smallMargin"
+          : ""
+      }`}
+    >
+      <p>
+        {upcomingMeetups.length === 0 && oldMeetups.length === 0
+          ? "You have no Meetups booked, go to the Meetups Page 😀"
+          : "You have no upcoming Meetups. Go to the Meetups Page to book your next one! 😀"}
+        <br />
+        <Link className="link" to="/meetups">
+          👉 Book Meetup!
+        </Link>
+      </p>
+    </div>
+  );
+
   return (
     <div className="profileMainContainer">
       <Header userLogoSrc={userLogo} />
       <div className="meetupBox">
-        <h2 className="headline">Upcoming meetups</h2>
-        {upcomingMeetups.map((meetup) => (
-          <UpcomingMeetup key={meetup.meetupId} meetupDetails={meetup} />
-        ))}
+        {upcomingMeetups.length === 0 &&
+          oldMeetups.length === 0 &&
+          renderNoMeetupsMessage()}
+
+        {upcomingMeetups.length > 0 && (
+          <>
+            <h2 className="headline">Upcoming meetups</h2>
+            {upcomingMeetups.map((meetup) => (
+              <UpcomingMeetup key={meetup.meetupId} meetupDetails={meetup} />
+            ))}
+          </>
+        )}
+
+        {upcomingMeetups.length === 0 &&
+          oldMeetups.length > 0 &&
+          renderNoMeetupsMessage()}
 
         <h2 className="headline">Old meetups</h2>
-        {oldMeetups.map((event) => (
-          <OldMeetup key={event.meetupId} eventDetails={event} />
-        ))}
+        {oldMeetups.length > 0 ? (
+          oldMeetups.map((event) => (
+            <OldMeetup key={event.meetupId} eventDetails={event} />
+          ))
+        ) : (
+          <div className="noOldMeetupsMessage">
+            <p>
+              You have no past meetups yet! Check back after you have attended
+              one to leave a review 🤗
+            </p>
+          </div>
+        )}
       </div>
       <Footer />
     </div>

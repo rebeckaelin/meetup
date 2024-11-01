@@ -79,6 +79,8 @@ const UpcomingMeetup = ({ meetupDetails }) => {
     <div className="upcommingMeetupContainer">
       <div className="headerContent">
         {meetupDetails.name}
+        <span></span>
+        {meetupDetails.date}
         <img
           src={expandarrow}
           alt="Expand More"
