@@ -48,8 +48,8 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
       //   alert("could not get reviews");
       //   return;
       // }
-      console.log("data", data);
 
+      console.log("data.data", data.data);
       setReviewList(data.data);
       checkIfReviewIsLeft(userId);
       console.log("hasleftreview", hasLeftReview);
@@ -87,7 +87,7 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
 
           <div>
             <p>
-              <strong>Average:</strong>{" "}
+              <strong>Average rating:</strong>{" "}
             </p>
             <div>
               {reviewList.length > 0 ? (
