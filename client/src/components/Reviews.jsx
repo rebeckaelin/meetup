@@ -5,7 +5,7 @@ import "../sass/Reviews.scss";
 const Reviews = ({ meetupId, hasLeftReview }) => {
   const [review, setReview] = useState("");
   const [rating, setRating] = useState("");
-
+  const [justRate, setJustRate] = useState(false);
   const handleReview = async (event) => {
     const token = sessionStorage.getItem("userToken");
 
@@ -33,7 +33,8 @@ const Reviews = ({ meetupId, hasLeftReview }) => {
         alert("could not add rating");
         return;
       }
-      location.reload();
+      alert("added rating");
+      setJustRate(true);
     } catch (error) {
       console.log(error);
     }
@@ -66,12 +67,12 @@ const Reviews = ({ meetupId, hasLeftReview }) => {
             disabled={hasLeftReview ? true : false}
             className="reviewButton"
             style={{
-              opacity: hasLeftReview ? 0.5 : "",
-              cursor: hasLeftReview ? "not-allowed" : "pointer",
+              opacity: hasLeftReview || justRate ? 0.5 : "",
+              cursor: hasLeftReview || justRate ? "not-allowed" : "pointer",
             }}
             type="submit"
           >
-            {hasLeftReview ? "Reviewed" : "Add review"}
+            {hasLeftReview || justRate ? "Reviewed" : "Add review"}
           </button>
         </div>
       </form>
