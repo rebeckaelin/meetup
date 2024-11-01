@@ -1,4 +1,5 @@
 import "../sass/Header.scss";
+import PropTypes from "prop-types";
 
 import { useNavigate } from "react-router-dom";
 const Header = ({ userLogoSrc, hideContent }) => {
@@ -14,7 +15,9 @@ const Header = ({ userLogoSrc, hideContent }) => {
     <div className="headerMainContainer">
       <div className="left-container">
         <div className="ball"></div>
-        <h1 onClick={() => navigate("/meetups")}>MeetHub</h1>
+        <h1 className="headerTitle" onClick={() => navigate("/meetups")}>
+          MeetHub
+        </h1>
       </div>
       <div className={`right-container ${hideContent ? "hidden" : ""}`}>
         <p className="logoutButton" onClick={handleLogout}>
@@ -29,6 +32,11 @@ const Header = ({ userLogoSrc, hideContent }) => {
       </div>
     </div>
   );
+};
+
+Header.propTypes = {
+  userLogoSrc: PropTypes.string.isRequired,
+  hideContent: PropTypes.bool,
 };
 
 export default Header;

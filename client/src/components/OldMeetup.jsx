@@ -1,24 +1,57 @@
 import "../sass/UpcommingMeetup.scss";
 import expandarrow from "../assets/expand-arrow.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Reviews from "./Reviews";
 const OldMeetup = ({ eventDetails, hideContent }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [toggleReview, setToggleReview] = useState(false);
+  const token = sessionStorage.getItem("userToken");
+  const userId = sessionStorage.getItem("user");
+  const [reviewList, setReviewList] = useState([]);
+  const [hasLeftReview, setHasLeftReview] = useState("");
 
   const {
     desc = "ingen beskrivning tillgänglig",
     name = "Ingen titel",
     location = "Ingen plats",
     host = "Ingen värd",
-    averageRating = 0,
-    reviews = [],
   } = eventDetails || {};
-  const handleImageClick = () => {
-    const newIsOpen = !isOpen;
-    setIsOpen(newIsOpen);
+
+  const getData = async () => {
+    try {
+      const res = await fetch(
+        `https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/reviews/${eventDetails.meetupId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await res.json();
+      if (!data.success) {
+        alert("could not get reviews");
+        return;
+      }
+
+      setReviewList(data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      if (reviewList.length > 0) {
+        const isReviewed = reviewList.some((value) => value.userId === userId);
+
+        setHasLeftReview(isReviewed);
+      } else {
+        setHasLeftReview(false);
+      }
+    }
   };
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className="upcommingMeetupContainer">
@@ -28,7 +61,7 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
           src={expandarrow}
           alt="Expand More"
           className={`expandMoreIcon ${isOpen ? "rotated" : ""}`}
-          onClick={handleImageClick}
+          onClick={() => setIsOpen(!isOpen)}
           style={{
             transform: isOpen ? "rotate(0deg)" : "rotate(90deg)",
           }}
@@ -46,13 +79,29 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
 
           <div>
             <p>
-              <strong>Average:</strong> {averageRating}
+              <strong>Average rating:</strong>{" "}
             </p>
+            <div>
+              {reviewList.length > 0 ? (
+                (
+                  reviewList.reduce(
+                    (acc, curr) => Number(acc) + Number(curr.rating),
+                    0
+                  ) / reviewList.length
+                ).toFixed(2)
+              ) : (
+                <p>No rating added on meetup</p>
+              )}
+            </div>
             <h4>Reviews:</h4>
-            <ul>
-              {reviews.map((review, reviewIndex) => (
-                <li key={reviewIndex}>{review}</li>
-              ))}
+            <ul className="reviewItem">
+              {reviewList.length > 0 ? (
+                reviewList.map((review, reviewIndex) => (
+                  <li key={reviewIndex}>{review.comment}</li>
+                ))
+              ) : (
+                <p>No reviews added on meetup yet</p>
+              )}
             </ul>
           </div>
           <br></br>
@@ -67,7 +116,9 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
               className={`expandMoreIcon ${toggleReview ? "rotated" : ""} ${
                 hideContent ? "hidden" : ""
               }`}
-              onClick={() => setToggleReview(!toggleReview)}
+              onClick={() => {
+                setToggleReview(!toggleReview), getData();
+              }}
               style={{
                 transform: toggleReview ? "rotate(0deg)" : "rotate(90deg)",
               }}
@@ -75,7 +126,12 @@ const OldMeetup = ({ eventDetails, hideContent }) => {
           </div>
 
           <div className={` ${hideContent ? "hidden" : ""}`}>
-            {toggleReview && <Reviews meetupId={eventDetails.meetupId} />}
+            {toggleReview && (
+              <Reviews
+                hasLeftReview={hasLeftReview}
+                meetupId={eventDetails.meetupId}
+              />
+            )}
           </div>
         </div>
       )}

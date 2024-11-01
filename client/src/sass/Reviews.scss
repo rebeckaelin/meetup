@@ -17,6 +17,8 @@
   border: none;
   border-radius: 4px;
   resize: none;
+  background-color: $white;
+  color: $black;
 }
 .reviewInput::placeholder {
   font-style: italic;
@@ -46,7 +48,7 @@
 .reviewButton {
   @include setButtonStyle($black, $white);
   padding: 3px;
-  @include textFont($black, $fontFamily);
+  @include textFont($black, $fontFamily, true);
   margin-top: 5px;
   padding: 5px;
 }

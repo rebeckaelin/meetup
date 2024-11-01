@@ -4,18 +4,15 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 const UpcomingMeetup = ({ meetupDetails }) => {
+  const [participants, setParticipans] = useState([
+    ...meetupDetails.participants,
+  ]);
   const token = sessionStorage.getItem("userToken");
   const userId = sessionStorage.getItem("user");
   const [isOpen, setIsOpen] = useState(false);
-  const isBoked = meetupDetails.participants.includes(userId);
-  const reloadPage = () => {
-    window.location.reload();
-  };
+  const isBoked = participants.includes(userId);
+  const isFullyBooked = participants.length === meetupDetails.seats;
 
-  const handleImageClick = () => {
-    const newIsOpen = !isOpen;
-    setIsOpen(newIsOpen);
-  };
   const bookMeetup = async () => {
     try {
       const res = await fetch(
@@ -35,8 +32,8 @@ const UpcomingMeetup = ({ meetupDetails }) => {
         return;
       }
       alert(`${meetupDetails.name} is booked`);
-      reloadPage();
-      console.log("fetched data", data);
+
+      setParticipans([...participants, userId]);
     } catch (error) {
       console.log(error);
     }
@@ -60,8 +57,8 @@ const UpcomingMeetup = ({ meetupDetails }) => {
         return;
       }
       alert(`${meetupDetails.name} is canceled`);
-      reloadPage();
-      console.log("fetched data", data);
+
+      setParticipans(participants.filter((f) => f !== userId));
     } catch (error) {
       console.log(error);
     }
@@ -85,7 +82,7 @@ const UpcomingMeetup = ({ meetupDetails }) => {
           src={expandarrow}
           alt="Expand More"
           className={`expandMoreIcon ${isOpen ? "rotated" : ""}`}
-          onClick={handleImageClick}
+          onClick={() => setIsOpen(!isOpen)}
           style={{
             transform: isOpen ? "rotate(0deg)" : "rotate(90deg)",
           }}
@@ -109,18 +106,18 @@ const UpcomingMeetup = ({ meetupDetails }) => {
           </p>
           <p>
             <strong>Participants: </strong>
-            {meetupDetails.participants.length}
+            {participants.length}
           </p>
           <p>
             <strong>Seats: </strong>
             {meetupDetails.seats}
           </p>
-          <button className="bookingBtn" onClick={handleBooking}>
-            {isBoked
-              ? "avboka"
-              : meetupDetails.participants.length === meetupDetails.seats
-              ? "Fully booked"
-              : "Book"}
+          <button
+            disabled={isFullyBooked && !isBoked ? true : false}
+            className="bookingBtn"
+            onClick={handleBooking}
+          >
+            {isBoked ? "cancel" : isFullyBooked ? "Fully booked" : "Book"}
           </button>
         </div>
       )}

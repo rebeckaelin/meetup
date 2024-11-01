@@ -2,16 +2,15 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import "../sass/Reviews.scss";
 
-const Reviews = ({ meetupId }) => {
+const Reviews = ({ meetupId, hasLeftReview }) => {
   const [review, setReview] = useState("");
   const [rating, setRating] = useState("");
-
+  const [justRate, setJustRate] = useState(false);
   const handleReview = async (event) => {
     const token = sessionStorage.getItem("userToken");
+
     event.preventDefault();
-    console.log("rating", rating);
-    console.log("review", review);
-    //post req
+
     try {
       const res = await fetch(
         "https://yh2yzv1g0b.execute-api.eu-north-1.amazonaws.com/reviews",
@@ -29,11 +28,13 @@ const Reviews = ({ meetupId }) => {
         }
       );
       const data = await res.json();
-      console.log("data", data);
+
       if (!data.success) {
         alert("could not add rating");
         return;
       }
+      alert("added rating");
+      setJustRate(true);
     } catch (error) {
       console.log(error);
     }
@@ -62,8 +63,16 @@ const Reviews = ({ meetupId }) => {
             required
             placeholder="1-5"
           ></input>
-          <button className="reviewButton" type="submit">
-            Add review
+          <button
+            disabled={hasLeftReview ? true : false}
+            className="reviewButton"
+            style={{
+              opacity: hasLeftReview || justRate ? 0.5 : "",
+              cursor: hasLeftReview || justRate ? "not-allowed" : "pointer",
+            }}
+            type="submit"
+          >
+            {hasLeftReview || justRate ? "Reviewed" : "Add review"}
           </button>
         </div>
       </form>
@@ -73,6 +82,7 @@ const Reviews = ({ meetupId }) => {
 
 Reviews.propTypes = {
   meetupId: PropTypes.string,
+  hasLeftReview: PropTypes.bool,
 };
 
 export default Reviews;
