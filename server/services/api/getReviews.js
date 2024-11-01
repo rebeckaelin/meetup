@@ -18,8 +18,7 @@ const getReviews = async (event) => {
       },
     });
 
-    if (Items.length === 0)
-      return sendResponse(200, "No reviews left fot this meetup");
+    if (Items.length === 0) return sendResponse(200, []);
 
     return sendResponse(200, Items);
   } catch (error) {
