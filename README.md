@@ -31,11 +31,11 @@ prod: http://ss-meetup-prod.s3-website.eu-north-1.amazonaws.com/
 
 ## Creators of this masterpiece ✨
 
-💡 Linn Johansson – Idéspruta och kodknackare
-🛡️ Rebecka Larsson – Backend-kodens beskyddare
-🎨 Jens Brandels – Pixelperfektionist och designmagiker
-🌍 Johan Skoog – Vår globetrottande fullstack-sheriff
-🔧 Kristofer Almeros – Backend-fixar’n med koll på allt
+💡 Linn Johansson – Idéspruta och kodknackare </br>
+🛡️ Rebecka Larsson – Backend-kodens beskyddare</br>
+🎨 Jens Brandels – Pixelperfektionist och designmagiker</br>
+🌍 Johan Skoog – Vår globetrottande fullstack-sheriff</br>
+🔧 Kristofer Almeros – Backend-fixar’n med koll på allt</br>
 
 <!-- Logon och länkar för AWS och Serverless -->
 
