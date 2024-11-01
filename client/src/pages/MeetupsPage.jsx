@@ -59,30 +59,36 @@ const MeetupsPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const { data } = await res.json();
-      console.log("data", data);
+      const data = await res.json();
+      if (!data.success) {
+        alert("could not get meetups");
+        return;
+      }
+
       const today = new Date();
-      const upcoming = data.filter((meetup) => {
+      const upcoming = data.data.filter((meetup) => {
         const meetupDate = new Date(meetup.date);
 
         return meetupDate >= today;
       });
 
-      const old = data.filter((meetup) => {
+      const old = data.data.filter((meetup) => {
         const meetupDate = new Date(meetup.date);
 
         return meetupDate < today;
       });
+
       setFetchedData(upcoming);
       setOldMeetups(old);
-      setMeetupList(data);
+      setMeetupList(upcoming);
     } catch (err) {
       console.error(err);
     }
   };
   const searchForMeetup = (e) => {
     e.preventDefault();
-    console.log(searchString);
+
+    //säkerställer att string är tillräcklingt lång, annars nollar värdet
     if (searchString.length < 3) {
       alert("search with atleast 3 charactrers");
       setSearchString("");
@@ -108,6 +114,7 @@ const MeetupsPage = () => {
     }
 
     setMeetupList(searchResult);
+    //cleara värdet för inför nästa sökning
     setSearchString("");
     searchInputRef.current.value = "";
   };
@@ -129,6 +136,8 @@ const MeetupsPage = () => {
         .filter((city) => city)
     )
   );
+
+  //för att rensa filtrering på de olika kategorierna
   const clearFilter = () => {
     setSelectedLocation("");
     setSelectedDate("");
