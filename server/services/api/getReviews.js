@@ -3,31 +3,29 @@ import { verifyToken } from "../../middleware/verifyToken.js";
 import { sendError, sendResponse } from "../utils/responses.js";
 import middy from "@middy/core";
 
+const getReviews = async (event) => {
+  try {
+    const { meetupId } = event.pathParameters;
 
- const getReviews = async (event) => {
+    if (!meetupId || meetupId.trim() === "")
+      return sendError(400, "MeetupId is missing");
 
-    try {
-        const { meetupId } = event.pathParameters
+    const { Items } = await db.query({
+      TableName: "meetupReviewsTable",
+      KeyConditionExpression: "meetupId = :meetupId",
+      ExpressionAttributeValues: {
+        ":meetupId": meetupId,
+      },
+    });
 
-        if (!meetupId || meetupId.trim() === "") return sendError(400, "MeetupId is missing")
-        
-        const { Items } = await db.query({
-            TableName: "meetupReviewsTable",
-            KeyConditionExpression: "meetupId = :meetupId",
-            ExpressionAttributeValues: {
-                ":meetupId": meetupId
-            }
-        })
+    if (Items.length === 0)
+      return sendResponse(200, "No reviews left fot this meetup");
 
-        if (Items.length === 0) return sendError(404, "No reviews found for this meetup")
-        
-        return sendResponse(200, Items)
-    } catch (error) {
-        console.error("Error:", error)
-        return sendError(500, "Failed to retrieve reviews")
-    }
-}
+    return sendResponse(200, Items);
+  } catch (error) {
+    console.error("Error:", error);
+    return sendError(500, "Failed to retrieve reviews");
+  }
+};
 
-export const handler = middy() 
-    .handler(getReviews)
-    .use(verifyToken)
+export const handler = middy().handler(getReviews).use(verifyToken);
